@@ -10,7 +10,8 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
-package org.sonatype.sisu.litmus.testsupport;
+
+package org.sonatype.sisu.litmus.testsupport.mock;
 
 import com.google.common.collect.Maps;
 import org.mockito.internal.stubbing.defaultanswers.ReturnsMoreEmptyValues;
