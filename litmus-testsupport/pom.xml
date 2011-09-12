@@ -95,6 +95,29 @@
             <groupId>org.powermock</groupId>
             <artifactId>powermock-classloading-xstream</artifactId>
         </dependency>
+
+        <!-- inject package -->
+        <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-inject-bean</artifactId>
+            <exclusions>
+                <!-- Exclude no_aop guice; require aop-enabled version -->
+                <exclusion>
+                    <groupId>org.sonatype.sisu</groupId>
+                    <artifactId>sisu-guice</artifactId>
+                </exclusion>
+            </exclusions>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.sonatype.sisu</groupId>
+            <artifactId>sisu-guice</artifactId>
+            <version>3.1.0</version>
+            <optional>true</optional>
+        </dependency>
+
+
     </dependencies>
 
 </project>
