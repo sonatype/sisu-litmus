@@ -20,6 +20,11 @@ import org.sonatype.guice.bean.containers.InjectedTest;
 import org.sonatype.sisu.litmus.testsupport.TestTracer;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
+/**
+ * Support for injection-based tests.
+ *
+ * @since 1.0
+ */
 public class InjectedTestSupport
     extends InjectedTest
 {
