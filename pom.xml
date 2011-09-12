@@ -110,6 +110,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.sonatype.sisu</groupId>
+                <artifactId>sisu-guice</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit-dep</artifactId>
                 <version>4.8.2</version>
