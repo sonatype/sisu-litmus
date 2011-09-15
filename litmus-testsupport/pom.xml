@@ -91,6 +91,12 @@
             <groupId>org.powermock</groupId>
             <artifactId>powermock-classloading-xstream</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.googlecode.junit-ext</groupId>
+            <artifactId>junit-ext</artifactId>
+            <classifier>junit45</classifier>
+        </dependency>
 
         <!-- inject package -->
         <dependency>
