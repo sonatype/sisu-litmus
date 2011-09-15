@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.hamcrest.Description;
+import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
@@ -32,6 +33,7 @@ import org.hamcrest.TypeSafeMatcher;
  */
 public class FileMatchers {
 
+    @Factory
     public static Matcher<File> isDirectory() {
         return new TypeSafeMatcher<File>() {
             File fileTested;
@@ -62,6 +64,7 @@ public class FileMatchers {
         };
     }
 
+    @Factory
     public static Matcher<File> exists() {
         return new TypeSafeMatcher<File>() {
             File fileTested;
@@ -87,6 +90,7 @@ public class FileMatchers {
         };
     }
 
+    @Factory
     public static Matcher<File> isFile() {
         return new TypeSafeMatcher<File>() {
             File fileTested;
@@ -118,6 +122,7 @@ public class FileMatchers {
         };
     }
 
+    @Factory
     public static Matcher<File> readable() {
         return new TypeSafeMatcher<File>() {
             File fileTested;
@@ -143,6 +148,7 @@ public class FileMatchers {
         };
     }
 
+    @Factory
     public static Matcher<File> writable() {
         return new TypeSafeMatcher<File>() {
             File fileTested;
@@ -166,10 +172,12 @@ public class FileMatchers {
         };
     }
 
+    @Factory
     public static Matcher<File> sized(Long size) {
      return sized(Matchers.equalTo(size));
     }
 
+    @Factory
     public static Matcher<File> sized(final Matcher<Long> size) {
         return new TypeSafeMatcher<File>() {
             File fileTested;
@@ -203,7 +211,7 @@ public class FileMatchers {
     }
 
 
-
+    @Factory
     public static Matcher<File> named(final String name) {
         return new TypeSafeMatcher<File>() {
             private String filename;
@@ -230,7 +238,7 @@ public class FileMatchers {
         };
     }
 
-
+    @Factory
     public static Matcher<File> withCanonicalPath(final String path) {
         return new TypeSafeMatcher<File>() {
 
@@ -260,6 +268,7 @@ public class FileMatchers {
         };
     }
 
+    @Factory
     public static Matcher<File> withAbsolutePath(final String path) {
         return new TypeSafeMatcher<File>() {
             private String absPath;
