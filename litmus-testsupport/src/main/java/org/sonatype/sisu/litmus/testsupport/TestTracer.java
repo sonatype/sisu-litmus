@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport;
 
 import org.jetbrains.annotations.NonNls;
+import org.junit.internal.runners.model.MultipleFailureException;
 import org.junit.rules.TestWatchman;
 import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
@@ -65,7 +66,12 @@ public class TestTracer
 
     @Override
     public void failed(final Throwable e, final FrameworkMethod method) {
-        level.log(logger, "{} FAILED", prefix(method), e);
+        if(e instanceof MultipleFailureException){
+            MultipleFailureException mfe = (MultipleFailureException) e;
+            level.log(logger, "{} FAILED {} {}", prefix(method), e, mfe.getFailures());
+        } else {
+            level.log(logger, "{} FAILED", prefix(method), e);
+        }
     }
 
     @Override
