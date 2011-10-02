@@ -12,26 +12,23 @@
  */
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
-import java.io.File;
 import org.hamcrest.Matchers;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.sonatype.sisu.litmus.testsupport.TestSupport;
+
+import java.io.File;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 /**
  *
  * @author plynch
  */
-public class FileMatchersTest {
+public class FileMatchersTest
+    extends TestSupport{
 
     private static File REAL_FILE;
 
@@ -41,7 +38,7 @@ public class FileMatchersTest {
 
     @Before
     public void setupFiles() throws Exception {
-        REAL_FILE = new File(System.getProperty("basedir") + System.getProperty("file.separator") + "pom.xml");
+        REAL_FILE = new File(util.getBaseDir(), "pom.xml");
         assertThat(REAL_FILE.isFile(), is(true));
         assertThat(REAL_FILE.canRead(), is(true));
         assertThat(REAL_FILE.canWrite(), is(true));
@@ -119,6 +116,18 @@ public class FileMatchersTest {
         File sizedFile = new File(REAL_DIR, "src/test/resources/sized_file.txt");
         assertThat(sizedFile, FileMatchers.exists());
         assertThat(sizedFile, FileMatchers.sized(21L));
+    }
+
+    @Test
+    public void contains() {
+        File file = new File(REAL_DIR, "src/test/resources/file.properties");
+        assertThat(file, FileMatchers.contains("x=y", "foo=bar"));
+    }
+
+    @Test
+    public void doesNotContain() {
+        File file = new File(REAL_DIR, "src/test/resources/file.properties");
+        assertThat(file, FileMatchers.doesNotContain("y=x", "bar=foo"));
     }
 
 }
