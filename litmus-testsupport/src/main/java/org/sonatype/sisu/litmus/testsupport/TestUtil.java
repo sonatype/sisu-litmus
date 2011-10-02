@@ -32,7 +32,7 @@ public class TestUtil
 {
     public static final String BASEDIR = "basedir"; //NON-NLS
 
-    private final Class owner;
+    final Class owner;
 
     protected final File baseDir;
 
