@@ -12,6 +12,8 @@
  */
 package org.sonatype.sisu.litmus.testsupport;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jetbrains.annotations.NonNls;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,8 +22,6 @@ import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.sonatype.gossip.Level;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 /**
  * Support for tests.
  *
@@ -29,7 +29,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class TestSupport
 {
-    protected final TestUtil util = new TestUtil(this);
+
+    protected final TestUtil util = new TestUtil( this );
 
     @NonNls
     protected final Logger logger = util.getLog();
@@ -37,34 +38,48 @@ public class TestSupport
     private Level logLevel = Level.INFO;
 
     @Rule
-    public final TestRule tracer = new TestTracer(this);
+    public final MethodRule tracer = new TestTracer( this );
+
+    /**
+     * Test method utilities.
+     */
+    @Rule
+    public final TestMethod testMethod = new TestMethod( util );
 
     @Before
-    public void initMocks() {
-        MockitoAnnotations.initMocks(this);
+    public void initMocks()
+    {
+        MockitoAnnotations.initMocks( this );
     }
 
-    public Level getLogLevel() {
+    public Level getLogLevel()
+    {
         return logLevel;
     }
 
-    public void setLogLevel(final Level logLevel) {
-        this.logLevel = checkNotNull(logLevel);
+    public void setLogLevel( final Level logLevel )
+    {
+        this.logLevel = checkNotNull( logLevel );
     }
 
-    protected void log(final @NonNls String message) {
-        logLevel.log(logger, message);
+    protected void log( final @NonNls String message )
+    {
+        logLevel.log( logger, message );
     }
 
-    protected void log(final Object value) {
-        logLevel.log(logger, String.valueOf(value));
+    protected void log( final Object value )
+    {
+        logLevel.log( logger, String.valueOf( value ) );
     }
 
-    protected void log(final @NonNls String format, final Object... args) {
-        logLevel.log(logger, format, args);
+    protected void log( final @NonNls String format, final Object... args )
+    {
+        logLevel.log( logger, format, args );
     }
 
-    protected void log(final @NonNls String message, final Throwable cause) {
-        logLevel.log(logger, message, cause);
+    protected void log( final @NonNls String message, final Throwable cause )
+    {
+        logLevel.log( logger, message, cause );
     }
+
 }
