@@ -67,6 +67,32 @@ public class TestMethod extends TestWatchman {
     }
 
     /**
+     * Returns a directory specific to running test method.
+     * <p/>
+     * Format: {@code <project>/target/<root>/<test class package>/<test class name>/<test method name>/<path>}
+     *
+     * @param root root name relative to target dir
+     * @param path path to be appended to test method specific directory
+     * @return directory specific to running test method + provided path
+     */
+    public File getTargetDirMethodFile(final String root, String path) {
+        return
+                new File(
+                        new File(
+                                new File(
+                                        new File(
+                                                util.getTargetDir(),
+                                                root
+                                        ),
+                                        getClass().getCanonicalName().replace(".", "/")
+                                ),
+                                getName()
+                        ),
+                        path
+                );
+    }
+
+    /**
      * Resolves a test file by looking up the specified path into test resources starting with a specified root.
      * <p/>
      * It searches the following path locations:<br/>

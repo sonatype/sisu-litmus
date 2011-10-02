@@ -28,6 +28,7 @@ public class TestMethodTest
      * Setups root directory.
      * <p/>
      * {@inheritDoc}
+     *
      * @since 1.0
      */
     @Before
@@ -37,6 +38,7 @@ public class TestMethodTest
 
     /**
      * Tests that name is equal to test method.
+     *
      * @since 1.0
      */
     @Test
@@ -90,6 +92,17 @@ public class TestMethodTest
     public void resolveFromMethod() throws FileNotFoundException {
         File file = testMethod.resolveFile(root, "from-method");
         assertThat(file, is(equalTo(util.resolveFile("src/test/uncopied-resources/org/sonatype/sisu/litmus/testsupport/TestMethodTest/resolveFromMethod/from-method"))));
+    }
+
+    /**
+     * Test that a method specific target directory is resolved.
+     *
+     * @since 1.0
+     */
+    @Test
+    public void targetDirMethodFile() {
+        File file = testMethod.getTargetDirMethodFile("foo", "bar/car.txt");
+        assertThat(file, is(equalTo(new File(util.getTargetDir(), "foo/org/sonatype/sisu/litmus/testsupport/TestMethod/targetDirMethodFile/bar/car.txt"))));
     }
 
 }
