@@ -21,25 +21,30 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.jetbrains.annotations.NonNls;
-import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.MethodRule;
-import org.junit.rules.TestName;
-import org.mockito.MockitoAnnotations;
+import org.junit.rules.RuleChain;
+import org.junit.rules.TestRule;
 import org.slf4j.Logger;
 import org.sonatype.gossip.Level;
 import org.sonatype.guice.bean.containers.InjectedTest;
+import org.sonatype.sisu.litmus.testsupport.TestInfo;
+import org.sonatype.sisu.litmus.testsupport.TestInfoRule;
 import org.sonatype.sisu.litmus.testsupport.TestTracer;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
+import org.sonatype.sisu.litmus.testsupport.mock.MockitoRule;
 
 /**
- * Support for injection-based tests.
+ * Support for injection-based tests with the option of using a injected-test.properties file to configure the test.
  *
  * @since 1.0
  */
 public class InjectedTestSupport
     extends InjectedTest
 {
+    private final TestInfoRule testInfo = new TestInfoRule();
+
+    @Rule
+    public final TestRule ruleChain = RuleChain.outerRule(new TestTracer(this)).around(testInfo).around(new MockitoRule());
 
     static
     {
@@ -56,17 +61,6 @@ public class InjectedTestSupport
     protected final Logger logger = util.getLog();
 
     private Level logLevel = Level.INFO;
-
-    @Rule
-    public final MethodRule tracer = new TestTracer(this);
-
-    @Rule
-    public final TestName testName = new TestName();
-
-    @Before
-    public void initMocks() {
-        MockitoAnnotations.initMocks(this);
-    }
 
     public Level getLogLevel() {
         return logLevel;
@@ -157,6 +151,14 @@ public class InjectedTestSupport
                 }
             }
         }
+    }
+
+    /**
+     * @return contextual {@link TestInfo} about the currently executing test.
+     */
+    protected TestInfo getTestInfo()
+    {
+        return this.testInfo;
     }
 
 }

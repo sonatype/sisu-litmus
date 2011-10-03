@@ -15,7 +15,7 @@ package org.sonatype.sisu.litmus.testsupport;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.MethodRule;
+import org.junit.rules.TestRule;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.sonatype.gossip.Level;
@@ -37,7 +37,7 @@ public class TestSupport
     private Level logLevel = Level.INFO;
 
     @Rule
-    public final MethodRule tracer = new TestTracer(this);
+    public final TestRule tracer = new TestTracer(this);
 
     @Before
     public void initMocks() {

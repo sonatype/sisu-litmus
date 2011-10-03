@@ -13,9 +13,9 @@
 package org.sonatype.sisu.litmus.testsupport;
 
 import org.jetbrains.annotations.NonNls;
-import org.junit.internal.runners.model.MultipleFailureException;
-import org.junit.rules.TestWatchman;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+import org.junit.runners.model.MultipleFailureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonatype.gossip.Level;
@@ -29,7 +29,7 @@ import static java.lang.String.format;
  * @since 1.0
  */
 public class TestTracer
-    extends TestWatchman
+    extends TestWatcher
 {
     @NonNls
     private final Logger logger;
@@ -50,32 +50,33 @@ public class TestTracer
         return this;
     }
 
-    private String prefix(final FrameworkMethod method) {
-        return format("TEST %s", method.getName()); //NON-NLS
+    private String prefix(final Description description) {
+        return format("TEST %s", description.getMethodName()); //NON-NLS
     }
 
     @Override
-    public void starting(final FrameworkMethod method) {
-        level.log(logger, "{} STARTING", prefix(method));
-    }
-
-    @Override
-    public void succeeded(final FrameworkMethod method) {
-        level.log(logger, "{} SUCCEEDED", prefix(method));
-    }
-
-    @Override
-    public void failed(final Throwable e, final FrameworkMethod method) {
+    protected void failed(Throwable e, Description description) {
         if(e instanceof MultipleFailureException){
             MultipleFailureException mfe = (MultipleFailureException) e;
-            level.log(logger, "{} FAILED {} {}", prefix(method), e, mfe.getFailures());
+            level.log(logger, "{} FAILED {} {}", prefix(description), e, mfe.getFailures());
         } else {
-            level.log(logger, "{} FAILED", prefix(method), e);
+            level.log(logger, "{} FAILED", prefix(description), e);
         }
     }
 
     @Override
-    public void finished(final FrameworkMethod method) {
-        level.log(logger, "{} FINISHED", prefix(method));
+    protected void finished(Description description) {
+        level.log(logger, "{} FINISHED", prefix(description));
     }
+
+    @Override
+    protected void starting(Description description) {
+        level.log(logger, "{} STARTING", prefix(description));
+    }
+
+    @Override
+    protected void succeeded(Description description) {
+        level.log(logger, "{} STARTING", prefix(description));
+    }
+
 }
