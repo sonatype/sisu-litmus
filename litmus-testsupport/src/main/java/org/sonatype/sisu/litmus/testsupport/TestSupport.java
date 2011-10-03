@@ -38,7 +38,7 @@ public class TestSupport
     private Level logLevel = Level.INFO;
 
     @Rule
-    public final MethodRule tracer = new TestTracer( this );
+    public final TestRule tracer = new TestTracer(this);
 
     /**
      * Test method utilities.
