@@ -19,18 +19,17 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 
 /**
- * Some ideas to represent test assertions in more usable way
- * <p/>
- * Inspired and blatantly copied from:
- * http://stackoverflow.com/questions/319479/generate-formatted-diff-output-in-java
- * <p/>
- * Thank you!
+ * TODO
  *
- * @author cstamas
  * @since 1.0
  */
 public class DiffMatchers {
 
+    /**
+     * TODO
+     *
+     * @since 1.0
+     */
     private static class StringDiffMatcher
             extends BaseMatcher<String> {
 
@@ -85,11 +84,21 @@ public class DiffMatchers {
 
     }
 
+    /**
+     * TODO
+     *
+     * @since 1.0
+     */
     @Factory
     public static Matcher<String> equalTo(final String string) {
         return new StringDiffMatcher(string);
     }
 
+    /**
+     * TODO
+     *
+     * @since 1.0
+     */
     @Factory
     public static Matcher<String> equalToOnlyDiffs(final String string) {
         return new StringDiffMatcher(string, true);

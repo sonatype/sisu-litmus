@@ -27,12 +27,16 @@ import java.util.List;
  * <p/>
  * Thank you!
  *
- * @author cstamas
  * @since 1.0
  */
 public class DiffUtils {
 
 
+    /**
+     * TODO
+     *
+     * @since 1.0
+     */
     public static String diffSideBySide(String fromStr, String toStr, boolean onlyDiffs) {
         // this is equivalent of running unix diff -y command
         // not pretty, but it works. Feel free to refactor against unit test.
