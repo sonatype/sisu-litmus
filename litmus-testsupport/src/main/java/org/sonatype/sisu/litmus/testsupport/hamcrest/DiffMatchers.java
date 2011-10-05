@@ -78,7 +78,7 @@ public class DiffMatchers {
         }
 
         protected void describeMismatchSafely(String item, Description description) {
-            description.appendText("they differ as follows (expected on the left, actual on the right):\n");
+            description.appendText("they differ as follows (expected on the left, actual on the right) [E] only in expected, [A] only in actual, [D] difference between expected and actual:\n");
             final String diff = DiffUtils.diffSideBySide(string, item, onlyDiffs);
             description.appendText(diff);
         }

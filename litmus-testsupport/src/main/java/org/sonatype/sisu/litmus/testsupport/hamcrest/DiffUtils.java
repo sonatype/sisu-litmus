@@ -93,7 +93,7 @@ public class DiffUtils {
                 //write out a deletion
                 for (int i = delStart; i <= delEnd; i++) {
                     fromLineNum++;
-                    diffOut.append("[D] ");
+                    diffOut.append("[E] ");
                     diffOut.append(lineNumber(lnf, fromLineNum));
                     diffOut.append(Strings.padEnd(fromLines[i], maxStrWidth, ' '));
                     diffOut.append("<").append("\n");
@@ -122,7 +122,7 @@ public class DiffUtils {
                         right = toLines[toLineNum];
                         toLineNum++;
                     }
-                    diffOut.append("[M] ");
+                    diffOut.append("[D] ");
                     diffOut.append(lineNumber(lnf, fromLineNum));
                     diffOut.append(Strings.padEnd(left, maxStrWidth, ' '));
                     diffOut.append("| ");
