@@ -28,6 +28,7 @@ import java.util.List;
  * Thank you!
  *
  * @author cstamas
+ * @since 1.0
  */
 public class DiffUtils {
 

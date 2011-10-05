@@ -27,6 +27,7 @@ import org.hamcrest.Matcher;
  * Thank you!
  *
  * @author cstamas
+ * @since 1.0
  */
 public class DiffMatchers {
 
