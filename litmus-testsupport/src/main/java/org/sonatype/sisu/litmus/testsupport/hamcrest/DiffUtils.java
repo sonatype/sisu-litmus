@@ -74,7 +74,7 @@ public class DiffUtils {
                     toLineNum++;
                 }
 
-                if (!onlyDiffs) {
+                if (!onlyDiffs && fromLineNum > 0 && toLineNum > 0) {
                     diffOut.append("    ");
                     diffOut.append(lineNumber(lnf, fromLineNum));
                     diffOut.append(Strings.padEnd(left, maxStrWidth, ' '));
@@ -140,12 +140,16 @@ public class DiffUtils {
         while (!onlyDiffs) {
             String left = "";
             String right = "";
-            if (fromLineNum < (fromLines.length)) {
+            if (fromLineNum < fromLines.length) {
                 left = fromLines[fromLineNum];
+            }
+            if (fromLineNum <= fromLines.length) {
                 fromLineNum++;
             }
-            if (toLineNum < (toLines.length)) {
+            if (toLineNum < toLines.length) {
                 right = toLines[toLineNum];
+            }
+            if (toLineNum <= toLines.length) {
                 toLineNum++;
             }
             diffOut.append("    ");
@@ -155,7 +159,7 @@ public class DiffUtils {
             diffOut.append(lineNumber(lnf, toLineNum));
             diffOut.append(right).append("\n");
 
-            if ((fromLineNum == (fromLines.length)) && (toLineNum == (toLines.length))) {
+            if ((fromLineNum > fromLines.length) && (toLineNum > toLines.length)) {
                 break;
             }
         }
