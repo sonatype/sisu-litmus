@@ -26,6 +26,10 @@ import com.google.common.base.Strings;
 /**
  * Some ideas to represent test assertions in more usable way
  * <p/>
+ * Inspired and blatantly copied from:
+ * http://stackoverflow.com/questions/319479/generate-formatted-diff-output-in-java
+ * <p/>
+ * Thank you!
  *
  * @author cstamas
  */
