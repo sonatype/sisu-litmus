@@ -38,7 +38,7 @@ public class JUnitSupport {
         List<Failure> failures = result.getFailures();
         if (!result.wasSuccessful()) {
             for (Failure failure : failures) {
-                logger.error(" {} failed: {}", failure.getTestHeader(), failure.getException());
+                logger.error("Test Failure: {}", failure.getException());
             }
             Assert.fail("There were test failures. See logging output.");
         }
