@@ -76,20 +76,7 @@ public class TestMethod extends TestWatchman {
      * @return directory specific to running test method + provided path
      */
     public File getTargetDirMethodFile(final String root, String path) {
-        return
-                new File(
-                        new File(
-                                new File(
-                                        new File(
-                                                util.getTargetDir(),
-                                                root
-                                        ),
-                                        getClass().getCanonicalName().replace(".", "/")
-                                ),
-                                getName()
-                        ),
-                        path
-                );
+        return file(util.getTargetDir(), root, asPath(getClass()), getName(), path);
     }
 
     /**
@@ -138,11 +125,7 @@ public class TestMethod extends TestWatchman {
      * @since 1.10.0
      */
     private File testSourceDirectory(final File root, final String path) {
-        return
-                new File(
-                        root,
-                        path
-                );
+        return file(root, path);
     }
 
     /**
@@ -156,14 +139,7 @@ public class TestMethod extends TestWatchman {
      * @since 1.10.0
      */
     private File testPackageSourceDirectory(final File root, final String path) {
-        return
-                new File(
-                        new File(
-                                root,
-                                util.owner.getPackage().getName().replace(".", "/")
-                        ),
-                        path
-                );
+        return file(root, asPath(util.owner.getPackage()), path);
     }
 
     /**
@@ -177,14 +153,7 @@ public class TestMethod extends TestWatchman {
      * @since 1.10.0
      */
     private File testClassSourceDirectory(final File root, final String path) {
-        return
-                new File(
-                        new File(
-                                root,
-                                util.owner.getCanonicalName().replace(".", "/")
-                        ),
-                        path
-                );
+        return file(root, asPath(util.owner), path);
     }
 
     /**
@@ -198,17 +167,45 @@ public class TestMethod extends TestWatchman {
      * @since 1.10.0
      */
     private File testMethodSourceDirectory(final File root, final String path) {
-        return
-                new File(
-                        new File(
-                                new File(
-                                        root,
-                                        util.owner.getCanonicalName().replace(".", "/")
-                                ),
-                                getName()
-                        ),
-                        path
-                );
+        return file(root, asPath(util.owner), getName(), path);
+    }
+
+    /**
+     * Return a file path to a class (replaces "." with "/")
+     *
+     * @param clazz class to get the path for
+     * @return path to class
+     * @since 1.0
+     */
+    private static String asPath(final Class<?> clazz) {
+        return asPath(clazz.getPackage()) + "/" + clazz.getSimpleName();
+    }
+
+    /**
+     * Return a file path from a package (replaces "." with "/")
+     *
+     * @param pkg package to get the path for
+     * @return package path
+     * @since 1.0
+     */
+    private static String asPath(final Package pkg) {
+        return pkg.getName().replace(".", "/");
+    }
+
+    /**
+     * File builder
+     *
+     * @param root  starting root
+     * @param paths paths to append
+     * @return a file starting from root and appended sub-paths
+     * @since 1.10.0
+     */
+    private static File file(final File root, final String... paths) {
+        File file = root;
+        for (String path : paths) {
+            file = new File(file, path);
+        }
+        return file;
     }
 
 }
