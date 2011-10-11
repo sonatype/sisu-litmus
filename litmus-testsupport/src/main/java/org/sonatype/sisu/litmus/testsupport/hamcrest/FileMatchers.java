@@ -24,6 +24,7 @@ import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -334,6 +335,45 @@ public class FileMatchers {
             protected void describeMismatchSafely(File item, Description description) {
                 description.appendText("did not contain ");
                 description.appendValueList("[", "][", "]", missing);
+            }
+
+        };
+    }
+
+    /**
+     * Assert a file contains only the specified string content
+     */
+    @Factory
+    public static Matcher<File> containsOnly(final String content) {
+
+        return new TypeSafeMatcher<File>() {
+
+            private File item;
+            private String fileContent;
+
+            @Override
+            public boolean matchesSafely(File item) {
+                this.item = item;
+                try {
+                    fileContent = readFully(item);
+                    return fileContent.equals(content);
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("File ");
+                description.appendValue(item);
+                description.appendText(" to contain only ");
+                description.appendValue(content);
+            }
+
+            @Override
+            protected void describeMismatchSafely(File item, Description description) {
+               final String diff = DiffUtils.diffSideBySide(fileContent, content, true);
+               description.appendText(diff);
             }
 
         };

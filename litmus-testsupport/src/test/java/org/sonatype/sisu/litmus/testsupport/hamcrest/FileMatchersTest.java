@@ -130,4 +130,11 @@ public class FileMatchersTest
         assertThat(file, FileMatchers.doesNotContain("y=x", "bar=foo"));
     }
 
+    @Test
+    public void containsOnly() {
+        File file = new File(REAL_DIR, "src/test/resources/sized_file.txt");
+        assertThat(file, FileMatchers.containsOnly("A File of fixed size\n"));
+    }
+
+
 }
