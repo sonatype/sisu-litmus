@@ -12,6 +12,7 @@
  */
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
+import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
@@ -86,6 +87,42 @@ public class BeanMatchersTest
         final Bean expected = createBean(2);
         final Bean actual = createBean(2);
         actual.getArrayOfBeansValue()[1].getArrayOfBeansValue()[1] = createBean(1);
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void arrayOfBeansDiffNullOnExpected() {
+        final Bean expected = createBean(1);
+        final Bean actual = createBean(1);
+        expected.setArrayOfBeansValue(null);
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void arrayOfBeansDiffNullOnActual() {
+        final Bean expected = createBean(1);
+        final Bean actual = createBean(1);
+        actual.setArrayOfBeansValue(null);
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void collectionOfBeansDiffNullOnExpected() {
+        final Bean expected = createBean(1);
+        final Bean actual = createBean(1);
+        expected.setCollectionOfBeansValue(null);
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void collectionOfBeansDiffNullOnActual() {
+        final Bean expected = createBean(1);
+        final Bean actual = createBean(1);
+        actual.setCollectionOfBeansValue(null);
 
         assertThat(actual, similarTo(expected));
     }
@@ -168,7 +205,7 @@ public class BeanMatchersTest
             return collectionOfBeansValue;
         }
 
-        public void setCollectionOfBeansValue(Collection<Bean> collectionOfBeansValue) {
+        public void setCollectionOfBeansValue(@Nullable Collection<Bean> collectionOfBeansValue) {
             this.collectionOfBeansValue = collectionOfBeansValue;
         }
 
@@ -184,7 +221,7 @@ public class BeanMatchersTest
             return arrayOfBeansValue;
         }
 
-        public void setArrayOfBeansValue(Bean[] arrayOfBeansValue) {
+        public void setArrayOfBeansValue(@Nullable Bean[] arrayOfBeansValue) {
             this.arrayOfBeansValue = arrayOfBeansValue;
         }
 
