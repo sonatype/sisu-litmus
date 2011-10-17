@@ -132,10 +132,6 @@ public class BeanMatchers {
             }
             // maybe the values are equal, so we do not have to do any check
             if (match(actual, equalTo(expected), "Maybe values are equal")) {
-                if(expected.getClass().isArray())
-                {
-                    System.out.println();
-                }
                 return true;
             }
 
