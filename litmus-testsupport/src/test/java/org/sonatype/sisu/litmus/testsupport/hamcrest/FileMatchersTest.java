@@ -12,6 +12,7 @@
  */
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
+import java.io.IOException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,7 @@ import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import java.io.File;
 
+import java.util.zip.ZipFile;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -136,5 +138,11 @@ public class FileMatchersTest
         assertThat(file, FileMatchers.containsOnly("A File of fixed size\n"));
     }
 
+    @Test
+    public void containsEntry() throws IOException {
+        File file = new File(REAL_DIR, "src/test/resources/test.jar");
+        assertThat(new ZipFile(file), FileMatchers.containsEntry("META-INF/MANIFEST.MF"));
+        assertThat(new ZipFile(file), FileMatchers.containsEntry("META-INF/"));
+    }
 
 }

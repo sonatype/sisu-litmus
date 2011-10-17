@@ -19,12 +19,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
 
@@ -419,9 +421,52 @@ public class FileMatchers {
         };
     }
 
+    public static Matcher<ZipFile> containsEntry(final String entryName) {
+        return new TypeSafeMatcher<ZipFile>() {
+
+            private ZipFile zipFile;
+
+            @Override
+            protected boolean matchesSafely(ZipFile item) {
+                this.zipFile = item;
+                Enumeration entries = item.entries();
+                while (entries.hasMoreElements()) {
+                    ZipEntry entry = (ZipEntry) entries.nextElement();
+                    if (entry.getName().equals(entryName)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("archive ");
+                description.appendValue(zipFile.getName());
+                description.appendText(" to contain entry named ");
+                description.appendValue(entryName);
+            }
+
+            @Override
+            protected void describeMismatchSafely(ZipFile item, Description mismatchDescription) {
+                mismatchDescription.appendText(" archive contained these entries:\n");
+                Enumeration<? extends ZipEntry> entries = item.entries();
+                while (entries.hasMoreElements()) {
+                    mismatchDescription.appendValue(entries.nextElement().getName());
+                    if (entries.hasMoreElements()) {
+                        mismatchDescription.appendText("\n");
+                    }
+                }
+
+            }
+        };
+
+    }
+
     /**
      * Read from file till EOF.
      *
+     * FIXME: why is this here? move to util class, this class for Matchers only
      * @param file the file from which to read
      * @return the contents read out of the given file
      * @throws IOException if the contents could not be read out from the
@@ -442,6 +487,7 @@ public class FileMatchers {
     /**
      * Read from reader till EOF.
      *
+     * FIXME: why is this here? move to util class, this class for Matchers only
      * @param rdr the reader from which to read.
      * @return the contents read out of the given reader.
      * @throws IOException if the contents could not be read out from the
@@ -453,7 +499,7 @@ public class FileMatchers {
 
     /**
      * Read from reader till EOF.
-     *
+     * FIXME: why is this here? move to util class, this class for Matchers only
      * @param rdr        the reader from which to read.
      * @param bufferSize the buffer size to use when reading.
      * @return the contents read out of the given reader.
