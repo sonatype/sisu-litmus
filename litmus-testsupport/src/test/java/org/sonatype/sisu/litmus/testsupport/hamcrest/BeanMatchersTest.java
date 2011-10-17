@@ -12,12 +12,14 @@
  */
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
+import com.google.common.collect.Maps;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.BeanMatchers.similarTo;
@@ -133,6 +135,42 @@ public class BeanMatchersTest
         assertThat("different", similarTo((Object) expected));
     }
 
+    @Test(expected = AssertionError.class)
+    public void givenActualMapContainAdditionalEntryMatchingShouldFail() {
+        final Bean expected = createBean(2);
+        final Bean actual = createBean(2);
+        actual.getMapValue().put("3","3");
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void givenExpectedMapContainAdditionalEntryMatchingShouldFail() {
+        final Bean expected = createBean(2);
+        final Bean actual = createBean(2);
+        expected.getMapValue().put("3","3");
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void givenActualMapIsNullAndExpectedMapIsNotNullMatchingShouldFail() {
+        final Bean expected = createBean(2);
+        final Bean actual = createBean(2);
+        actual.setMapValue(null);
+
+        assertThat(actual, similarTo(expected));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void givenExpectedMapIsNullAndActualMapIsNotNullMatchingShouldFail() {
+        final Bean expected = createBean(2);
+        final Bean actual = createBean(2);
+        expected.setMapValue(null);
+
+        assertThat(actual, similarTo(expected));
+    }
+
     @Test
     public void subclass() {
         final Bean expected = new Bean();
@@ -162,6 +200,9 @@ public class BeanMatchersTest
         expected.setIntValue(1);
         expected.setStringValue("1");
         expected.setArrayValue(new String[]{"1", "2"});
+        expected.setMapValue(Maps.<String, String>newHashMap());
+        expected.getMapValue().put("1", "1");
+        expected.getMapValue().put("2", "2");
         if (depth > 0) {
             expected.setArrayOfBeansValue(new Bean[]{createBean(depth - 1), createBean(depth - 1)});
             expected.setCollectionOfBeansValue(Arrays.asList(createBean(depth - 1), createBean(depth - 1)));
@@ -176,6 +217,7 @@ public class BeanMatchersTest
         private String[] arrayValue;
         private Bean[] arrayOfBeansValue;
         private Collection<Bean> collectionOfBeansValue;
+        private Map<String, String> mapValue;
 
         public int getIntValue() {
             return intValue;
@@ -225,6 +267,14 @@ public class BeanMatchersTest
             this.arrayOfBeansValue = arrayOfBeansValue;
         }
 
+        public Map<String, String> getMapValue() {
+            return mapValue;
+        }
+
+        public void setMapValue(@Nullable final Map<String, String> mapValue) {
+            this.mapValue = mapValue;
+        }
+
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder();
@@ -238,6 +288,7 @@ public class BeanMatchersTest
             sb.append('}');
             return sb.toString();
         }
+
     }
 
 }

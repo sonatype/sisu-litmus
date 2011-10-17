@@ -15,6 +15,7 @@ package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -26,8 +27,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Java beans related matchers.
@@ -118,7 +118,6 @@ public class BeanMatchers {
                 return match(actual, equalTo(expected), "Null check");
             }
             // match iterable elements
-
             if (expected instanceof Iterable) {
                 return matchIterable(actual, expected);
             }
@@ -129,6 +128,10 @@ public class BeanMatchers {
             // match array elements
             if (expected.getClass().isArray()) {
                 return matchArray(actual, expected);
+            }
+            // match map elements
+            if (expected instanceof Map) {
+                return matchMap(actual, expected);
             }
             // maybe the values are equal, so we do not have to do any check
             if (match(actual, equalTo(expected), "Maybe values are equal")) {
@@ -184,10 +187,14 @@ public class BeanMatchers {
         public void describeTo(Description description) {
             description.appendText(path);
             if (!(failingMatcher instanceof SimilarMatcher)) {
-                description.appendText("     ");
+                description.appendText(" ");
             }
             //description.appendText("[").appendText(failingCheck).appendText("]");
-            failingMatcher.describeTo(description);
+            if (failingMatcher == null) {
+                description.appendValue(expected);
+            } else {
+                failingMatcher.describeTo(description);
+            }
         }
 
         /**
@@ -199,7 +206,11 @@ public class BeanMatchers {
             if (!(failingMatcher instanceof SimilarMatcher)) {
                 description.appendText(" ");
             }
-            failingMatcher.describeMismatch(this.failingActual, description);
+            if (failingMatcher == null) {
+                description.appendValue(actual);
+            } else {
+                failingMatcher.describeMismatch(this.failingActual, description);
+            }
         }
 
         /**
@@ -281,6 +292,7 @@ public class BeanMatchers {
          *
          * @param actual  value to be matched. Can be null.
          * @param matcher matcher to match value
+         * @param where   description of failing check. (only used for debugging)
          * @return true, if value matches
          */
         private boolean match(@Nullable final Object actual, final Matcher<?> matcher, final String where) {
@@ -353,6 +365,41 @@ public class BeanMatchers {
             } else {
                 return false;
             }
+        }
+
+        /**
+         * Matches elements of two maps.
+         *
+         * @param actualValue   actual values iterator
+         * @param expectedValue expected values iterator
+         * @return true, if value matches
+         */
+        private boolean matchMap(final Object actualValue, final Object expectedValue) {
+            if (!(expectedValue instanceof Map)) {
+                return true;
+            }
+            if (match(actualValue, isA(Map.class), "Is a map")) {
+                final Map<Object, Object> actualMap = Maps.newHashMap((Map<?, ?>) actualValue);
+                int i = 0;
+                for (Map.Entry<?, ?> expectedElement : ((Map<?, ?>) expectedValue).entrySet()) {
+                    if (!match(actualValue,
+                            hasEntry(
+                                    new SimilarMatcher<Object>(expectedElement.getKey(), null),
+                                    new SimilarMatcher<Object>(expectedElement.getValue(), null)
+                            ),
+                            "Actual map contains entry" + expectedElement)) {
+                        return false;
+                    }
+                    actualMap.remove(expectedElement.getKey());
+                    i++;
+                }
+                if (!actualMap.isEmpty()) {
+                    Map.Entry<Object, Object> firstExtra = actualMap.entrySet().iterator().next();
+                    return match(expected, hasKey(firstExtra.getKey()), "Actual map has more elements");
+                }
+                return true;
+            }
+            return false;
         }
 
         /**
