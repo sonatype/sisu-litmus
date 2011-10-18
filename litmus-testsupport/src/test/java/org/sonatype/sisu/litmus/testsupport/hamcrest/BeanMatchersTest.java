@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import com.google.common.collect.Maps;
+import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
@@ -70,7 +71,7 @@ public class BeanMatchersTest
     public void arrayDiff() {
         final Bean expected = createBean(2);
         final Bean actual = createBean(2);
-        actual.getArrayValue()[1] = "different";
+        actual.getArrayValue()[0] = "different";
 
         assertThat(actual, similarTo(expected));
     }
@@ -79,7 +80,7 @@ public class BeanMatchersTest
     public void arrayOfBeansArrayDiff() {
         final Bean expected = createBean(2);
         final Bean actual = createBean(2);
-        actual.getArrayOfBeansValue()[1].getArrayValue()[0] = "different";
+        actual.getArrayOfBeansValue()[0].getArrayValue()[1] = "different";
 
         assertThat(actual, similarTo(expected));
     }
@@ -88,7 +89,7 @@ public class BeanMatchersTest
     public void arrayOfBeansArrayOfBeansDiff() {
         final Bean expected = createBean(2);
         final Bean actual = createBean(2);
-        actual.getArrayOfBeansValue()[1].getArrayOfBeansValue()[1] = createBean(1);
+        actual.getArrayOfBeansValue()[1].getArrayOfBeansValue()[0] = createBean(1);
 
         assertThat(actual, similarTo(expected));
     }

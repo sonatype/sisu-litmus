@@ -26,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.*;
 
 /**
@@ -66,8 +65,11 @@ public class BeanMatchers {
          */
         private final T expected;
 
+        private SimilarMatcher<?> parent;
+        private SimilarMatcher<?> child;
+
         /**
-         * Bean traversal path.
+         * What is checking.
          */
         private final String path;
 
@@ -101,11 +103,12 @@ public class BeanMatchers {
          * Constructor.
          *
          * @param expected expected value. Can be null.
-         * @param path     bean traversal path
+         * @param parent   parent similarity matcher
          */
-        private SimilarMatcher(final T expected, final String path) {
+        private SimilarMatcher(final T expected, final String path, final SimilarMatcher<?> parent) {
             this.expected = expected;
-            this.path = path == null ? "" : path;
+            this.parent = parent;
+            this.path = path;
         }
 
         /**
@@ -169,7 +172,7 @@ public class BeanMatchers {
                     final Object expectedValue = em.invoke(expected);
                     final Object actualValue = am.invoke(actual);
 
-                    if (!match(actualValue, new SimilarMatcher<Object>(expectedValue, "." + m.getName() + "()"), "Getters are similar")) {
+                    if (!match(actualValue, new SimilarMatcher<Object>(expectedValue, "." + m.getName() + "()", this), "Getters are similar")) {
                         return false;
                     }
                 }
@@ -185,15 +188,16 @@ public class BeanMatchers {
          */
         @Override
         public void describeTo(Description description) {
-            description.appendText(path);
-            if (!(failingMatcher instanceof SimilarMatcher)) {
-                description.appendText(" ");
+            if (path != null) {
+                description.appendText(path);
             }
-            //description.appendText("[").appendText(failingCheck).appendText("]");
-            if (failingMatcher == null) {
-                description.appendValue(expected);
-            } else {
+            if (child != null) {
+                child.describeTo(description);
+            } else if (failingMatcher != null) {
+                description.appendText(" ");
                 failingMatcher.describeTo(description);
+            } else {
+                description.appendValue(expected);
             }
         }
 
@@ -202,14 +206,16 @@ public class BeanMatchers {
          */
         @Override
         public void describeMismatch(Object actual, Description description) {
-            description.appendText(path);
-            if (!(failingMatcher instanceof SimilarMatcher)) {
-                description.appendText(" ");
+            if (path != null) {
+                description.appendText(path);
             }
-            if (failingMatcher == null) {
-                description.appendValue(actual);
-            } else {
+            if (child != null) {
+                child.describeMismatch(failingActual, description);
+            } else if (failingMatcher != null) {
+                description.appendText(" ");
                 failingMatcher.describeMismatch(this.failingActual, description);
+            } else {
+                description.appendValue(failingActual);
             }
         }
 
@@ -297,6 +303,9 @@ public class BeanMatchers {
          */
         private boolean match(@Nullable final Object actual, final Matcher<?> matcher, final String where) {
             if (!matcher.matches(actual)) {
+                if (parent != null) {
+                    parent.child = this;
+                }
                 failingMatcher = matcher;
                 failingActual = actual;
                 failingCheck = where;
@@ -331,7 +340,17 @@ public class BeanMatchers {
             if (!expectedValue.getClass().isArray()) {
                 return true;
             }
-            return matchIterable(asList((Object[]) actualValue), asList((Object[]) expectedValue));
+            if (match(actualValue.getClass().isArray(), is(true), "Is an array")) {
+                final Object[] expectedArray = (Object[]) expectedValue;
+                final Object[] actualArray = (Object[]) actualValue;
+                final SimilarMatcher<?>[] itemsMatchers = new SimilarMatcher[expectedArray.length];
+                for (int i = 0; i < expectedArray.length; i++) {
+                    itemsMatchers[i] = new SimilarMatcher<Object>(expectedArray[i], "[" + i + "]", this);
+                }
+
+                return match(actualArray, arrayContaining(itemsMatchers), "Array contains in any order");
+            }
+            return false;
         }
 
         /**
@@ -346,25 +365,17 @@ public class BeanMatchers {
                 return true;
             }
             if (match(actualValue, isA(Iterator.class), "Is an iterator")) {
-                final Iterator expectedIterator = (Iterator) expectedValue;
-                final Iterator actualIterator = (Iterator) actualValue;
+                final List<?> expectedList = Lists.newArrayList((Iterator<?>) expectedValue);
+                final List<?> actualList = Lists.newArrayList((Iterator<?>) actualValue);
+                final SimilarMatcher<?>[] itemsMatchers = new SimilarMatcher[expectedList.size()];
                 int i = 0;
-                while (expectedIterator.hasNext()) {
-                    final Object expectedElement = expectedIterator.next();
-                    if (actualIterator.hasNext()) {
-                        final Object actualElement = actualIterator.next();
-                        if (!match(actualElement, new SimilarMatcher<Object>(expectedElement, "[" + i + "]"), "Iterated element is similar " + actualElement + "/" + expectedElement)) {
-                            return false;
-                        }
-                        i++;
-                    } else {
-                        return match(null, equalTo(expectedElement), "Expected has no more elements");
-                    }
+                for (final Object expectedElement : expectedList) {
+                    itemsMatchers[i] = new SimilarMatcher<Object>(expectedElement, null, this);
+                    i++;
                 }
-                return !actualIterator.hasNext() || match(null, equalTo(actualIterator.next()), "Actual has more elements");
-            } else {
-                return false;
+                return match(actualList, containsInAnyOrder(itemsMatchers), "Iterable contains in any order");
             }
+            return false;
         }
 
         /**
@@ -380,18 +391,16 @@ public class BeanMatchers {
             }
             if (match(actualValue, isA(Map.class), "Is a map")) {
                 final Map<Object, Object> actualMap = Maps.newHashMap((Map<?, ?>) actualValue);
-                int i = 0;
                 for (Map.Entry<?, ?> expectedElement : ((Map<?, ?>) expectedValue).entrySet()) {
                     if (!match(actualValue,
                             hasEntry(
-                                    new SimilarMatcher<Object>(expectedElement.getKey(), null),
-                                    new SimilarMatcher<Object>(expectedElement.getValue(), null)
+                                    new SimilarMatcher<Object>(expectedElement.getKey(), null, this),
+                                    new SimilarMatcher<Object>(expectedElement.getValue(), null, this)
                             ),
-                            "Actual map contains entry" + expectedElement)) {
+                            "Actual map has item")) {
                         return false;
                     }
                     actualMap.remove(expectedElement.getKey());
-                    i++;
                 }
                 if (!actualMap.isEmpty()) {
                     Map.Entry<Object, Object> firstExtra = actualMap.entrySet().iterator().next();
@@ -419,6 +428,7 @@ public class BeanMatchers {
         public String toString() {
             return path;
         }
+
 
     }
 
