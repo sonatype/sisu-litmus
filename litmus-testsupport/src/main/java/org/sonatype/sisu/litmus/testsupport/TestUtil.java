@@ -153,4 +153,15 @@ public class TestUtil
     public final File createTempFile(final String prefix) throws IOException {
         return createTempFile(getTmpDir(), prefix);
     }
+    
+    public final File createTempDir(final File dir, final String prefix) throws IOException {
+        File file = createTempFile(dir, prefix);
+        file.delete(); // ^^^ makes a file, so nuke it and turn it into a directory
+        file.mkdirs();
+        return file;
+    }
+
+    public final File createTempDir(final String prefix) throws IOException {
+        return createTempDir(getTmpDir(), prefix);
+    }
 }
