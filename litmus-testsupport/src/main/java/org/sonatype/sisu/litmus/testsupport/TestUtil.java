@@ -12,6 +12,7 @@
  */
 package org.sonatype.sisu.litmus.testsupport;
 
+import com.google.common.base.Throwables;
 import org.jetbrains.annotations.NonNls;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TestUtil
 {
     public static final String BASEDIR = "basedir"; //NON-NLS
+
+    public static final String TARGET = "target"; //NON-NLS
+
+    public static final String TMP = "test-tmp"; //NON-NLS
 
     final Class owner;
 
@@ -96,12 +101,12 @@ public class TestUtil
     }
 
     public File getTargetDir() {
-        return resolveFile("target");
+        return resolveFile(TARGET);
     }
 
     public File getTmpDir() {
         if (tmpDir == null) {
-            tmpDir = getTargetDir();
+            tmpDir = new File(getTargetDir(), TMP);
         }
         return tmpDir;
     }
@@ -144,24 +149,32 @@ public class TestUtil
         return resolveFile(path).getPath();
     }
 
-    public final File createTempFile(final File dir, final String prefix) throws IOException {
-        File file = File.createTempFile(prefix + "-", ".tmp", dir); //NON-NLS
+    public final File createTempFile(final File dir, final String prefix)  {
+        File file;
+        dir.mkdirs();
+        try {
+            file = File.createTempFile(prefix + "-", ".tmp", dir); //NON-NLS
+        }
+        catch (IOException e) {
+            // No need to expose this as checked for test code to deal with, just barf it up
+            throw Throwables.propagate(e);
+        }
         file.deleteOnExit();
         return file;
     }
 
-    public final File createTempFile(final String prefix) throws IOException {
+    public final File createTempFile(final String prefix) {
         return createTempFile(getTmpDir(), prefix);
     }
     
-    public final File createTempDir(final File dir, final String prefix) throws IOException {
+    public final File createTempDir(final File dir, final String prefix) {
         File file = createTempFile(dir, prefix);
         file.delete(); // ^^^ makes a file, so nuke it and turn it into a directory
         file.mkdirs();
         return file;
     }
 
-    public final File createTempDir(final String prefix) throws IOException {
+    public final File createTempDir(final String prefix) {
         return createTempDir(getTmpDir(), prefix);
     }
 }
