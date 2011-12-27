@@ -62,6 +62,7 @@
 
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
+        <sonatype-gossip.version>1.8</sonatype-gossip.version>
         <powermockVersion>1.4.9</powermockVersion>
     </properties>
 
@@ -82,13 +83,13 @@
             <dependency>
                 <groupId>org.sonatype.gossip</groupId>
                 <artifactId>gossip-bootstrap</artifactId>
-                <version>1.8-SNAPSHOT</version>
+                <version>${sonatype-gossip.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.sonatype.gossip</groupId>
                 <artifactId>gossip-support</artifactId>
-                <version>1.8-SNAPSHOT</version>
+                <version>${sonatype-gossip.version}</version>
             </dependency>
 
             <dependency>
