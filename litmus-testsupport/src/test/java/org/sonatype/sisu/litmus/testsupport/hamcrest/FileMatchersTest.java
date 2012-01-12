@@ -145,4 +145,16 @@ public class FileMatchersTest
         assertThat(new ZipFile(file), FileMatchers.containsEntry("META-INF/"));
     }
 
+    @Test
+    public void isEmpty()
+        throws IOException
+    {
+        File baseDir = new File( REAL_DIR, "src/test/resources/" );
+        assertThat( baseDir, not( FileMatchers.isEmpty() ) );
+
+        File dir = new File( REAL_DIR, "target/temp/dir" );
+        dir.mkdirs();
+        assertThat( dir, FileMatchers.isEmpty() );
+    }
+
 }

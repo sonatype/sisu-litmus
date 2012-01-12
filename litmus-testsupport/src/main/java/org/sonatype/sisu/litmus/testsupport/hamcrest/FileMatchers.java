@@ -429,7 +429,7 @@ public class FileMatchers {
             @Override
             protected boolean matchesSafely(ZipFile item) {
                 this.zipFile = item;
-                Enumeration entries = item.entries();
+                Enumeration<? extends ZipEntry> entries = item.entries();
                 while (entries.hasMoreElements()) {
                     ZipEntry entry = (ZipEntry) entries.nextElement();
                     if (entry.getName().equals(entryName)) {
@@ -523,6 +523,29 @@ public class FileMatchers {
             }
         }
         return (textBuffer == null) ? null : textBuffer.toString();
+    }
+
+    /**
+     * @return a matcher that checks if a File (directory) is empty!
+     */
+    public static Matcher<? super File> isEmpty()
+    {
+        return new TypeSafeMatcher<File>()
+        {
+            String[] files;
+
+            public boolean matchesSafely( File item )
+            {
+                files = item.list();
+                return files.length == 0;
+            }
+
+            public void describeTo( Description description )
+            {
+                description.appendText( " files found " );
+                description.appendValue( files );
+            }
+        };
     }
 
 }
