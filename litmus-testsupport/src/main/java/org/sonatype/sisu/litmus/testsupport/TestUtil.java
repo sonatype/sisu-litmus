@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -166,6 +167,13 @@ public final class TestUtil
     public File createTempFile(final String prefix) {
         return createTempFile(getTmpDir(), prefix);
     }
+
+    /**
+     * @since 1.1
+     */
+    public File createTempFile() {
+        return createTempFile(UUID.randomUUID().toString());
+    }
     
     public File createTempDir(final File dir, final String prefix) {
         File file = createTempFile(dir, prefix);
@@ -176,5 +184,12 @@ public final class TestUtil
 
     public File createTempDir(final String prefix) {
         return createTempDir(getTmpDir(), prefix);
+    }
+
+    /**
+     * @since 1.1
+     */
+    public File createTempDir() {
+        return createTempDir(UUID.randomUUID().toString());
     }
 }
