@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @since 1.0
  */
-public class TestUtil
+public final class TestUtil
 {
     public static final String BASEDIR = "basedir"; //NON-NLS
 
@@ -78,7 +78,7 @@ public class TestUtil
      *
      * @return  The base directory of the module which contains the concrete test class.
      */
-    protected final File initBaseDir() {
+    protected File initBaseDir() {
         File dir;
 
         // If ${basedir} is set, then honor it
@@ -121,7 +121,7 @@ public class TestUtil
      * @param path  The path to resolve.
      * @return      The resolved file for the given path.
      */
-    public final File resolveFile(final @NonNls String path) {
+    public File resolveFile(final @NonNls String path) {
         checkNotNull(path);
 
         File file = new File(path);
@@ -145,11 +145,11 @@ public class TestUtil
      *
      * @see #resolveFile(String)
      */
-    public final String resolvePath(final String path) {
+    public String resolvePath(final String path) {
         return resolveFile(path).getPath();
     }
 
-    public final File createTempFile(final File dir, final String prefix)  {
+    public File createTempFile(final File dir, final String prefix)  {
         File file;
         dir.mkdirs();
         try {
@@ -163,18 +163,18 @@ public class TestUtil
         return file;
     }
 
-    public final File createTempFile(final String prefix) {
+    public File createTempFile(final String prefix) {
         return createTempFile(getTmpDir(), prefix);
     }
     
-    public final File createTempDir(final File dir, final String prefix) {
+    public File createTempDir(final File dir, final String prefix) {
         File file = createTempFile(dir, prefix);
         file.delete(); // ^^^ makes a file, so nuke it and turn it into a directory
         file.mkdirs();
         return file;
     }
 
-    public final File createTempDir(final String prefix) {
+    public File createTempDir(final String prefix) {
         return createTempDir(getTmpDir(), prefix);
     }
 }
