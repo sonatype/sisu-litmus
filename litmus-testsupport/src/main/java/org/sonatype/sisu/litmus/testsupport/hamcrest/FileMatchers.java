@@ -424,14 +424,11 @@ public class FileMatchers {
     public static Matcher<ZipFile> containsEntry(final String entryName) {
         return new TypeSafeMatcher<ZipFile>() {
 
-            private ZipFile zipFile;
-
             @Override
             protected boolean matchesSafely(ZipFile item) {
-                this.zipFile = item;
                 Enumeration<? extends ZipEntry> entries = item.entries();
                 while (entries.hasMoreElements()) {
-                    ZipEntry entry = (ZipEntry) entries.nextElement();
+                    ZipEntry entry = entries.nextElement();
                     if (entry.getName().equals(entryName)) {
                         return true;
                     }
@@ -441,9 +438,7 @@ public class FileMatchers {
 
             @Override
             public void describeTo(Description description) {
-                description.appendText("archive ");
-                description.appendValue(zipFile.getName());
-                description.appendText(" to contain entry named ");
+                description.appendText("zip archive contains entry named ");
                 description.appendValue(entryName);
             }
 
