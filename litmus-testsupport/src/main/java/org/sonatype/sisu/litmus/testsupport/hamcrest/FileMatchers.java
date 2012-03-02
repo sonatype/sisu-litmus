@@ -15,9 +15,13 @@ package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -300,7 +304,7 @@ public class FileMatchers
                 try
                 {
                     canonPath = item.getCanonicalPath();
-                    return path.matches( canonPath );
+                    return path.matches( normalizePath( canonPath ) );
                 }
                 catch ( IOException e )
                 {
@@ -335,7 +339,7 @@ public class FileMatchers
             public boolean matchesSafely( File item )
             {
                 absPath = item.getAbsolutePath();
-                return path.matches( absPath );
+                return path.matches( normalizePath( absPath ) );
             }
 
             @Override
@@ -640,6 +644,113 @@ public class FileMatchers
                 description.appendValue( files );
             }
         };
+    }
+
+    @Factory
+    public static Matcher<? super File> matchSha1( File file )
+        throws IOException
+    {
+        return matchSha1( createSHA1FromStream( file ) );
+    }
+
+    @Factory
+    public static Matcher<? super File> matchSha1( final String expectedSha1 )
+    {
+        return new TypeSafeMatcher<File>()
+        {
+            String sha1;
+
+            public boolean matchesSafely( File item )
+            {
+                try
+                {
+                    sha1 = createSHA1FromStream( item );
+                }
+                catch ( IOException e )
+                {
+                    return false;
+                }
+                return sha1.equals( expectedSha1 );
+            }
+
+            @Override
+            public void describeTo( Description description )
+            {
+                description.appendText( "File with sha1 " );
+                description.appendValue( expectedSha1 );
+            }
+
+            @Override
+            protected void describeMismatchSafely( File item, Description description )
+            {
+                description.appendText( "was " );
+                description.appendValue( sha1 );
+            }
+        };
+    }
+
+    private static String createSHA1FromStream( File file )
+        throws IOException
+    {
+        InputStream in = null;
+
+        try
+        {
+            in = new FileInputStream( file );
+
+            byte[] bytes = new byte[4096];
+            MessageDigest digest;
+            try
+            {
+                digest = MessageDigest.getInstance( "SHA1" );
+            }
+            catch ( NoSuchAlgorithmException e )
+            {
+                throw new IllegalStateException( e.getMessage(), e );
+            }
+
+            for ( int n; ( n = in.read( bytes ) ) >= 0; )
+            {
+                if ( n > 0 )
+                {
+                    digest.update( bytes, 0, n );
+                }
+            }
+
+            bytes = digest.digest();
+            StringBuffer sb = new StringBuffer( bytes.length * 2 );
+            for ( int i = 0; i < bytes.length; i++ )
+            {
+                int n = bytes[i] & 0xFF;
+                if ( n < 0x10 )
+                {
+                    sb.append( '0' );
+                }
+                sb.append( Integer.toHexString( n ) );
+            }
+
+            return sb.toString();
+        }
+        finally
+        {
+            if ( in != null )
+            {
+                in.close();
+            }
+        }
+    }
+
+    /**
+     * Escape window separator char in order to user regex
+     */
+    public static String normalizePath( String pattern )
+    {
+        // windows escape separator
+        if ( File.separatorChar == '\\' )
+        {
+            pattern = pattern.replace( "\\", "\\\\" );
+        }
+        return pattern;
     }
 
 }
