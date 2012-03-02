@@ -660,8 +660,11 @@ public class FileMatchers
         {
             String sha1;
 
+            File file;
+
             public boolean matchesSafely( File item )
             {
+                this.file = item;
                 try
                 {
                     sha1 = createSHA1FromStream( item );
@@ -676,7 +679,9 @@ public class FileMatchers
             @Override
             public void describeTo( Description description )
             {
-                description.appendText( "File with sha1 " );
+                description.appendText( "File " );
+                description.appendValue( file );
+                description.appendText( "with sha1 " );
                 description.appendValue( expectedSha1 );
             }
 
