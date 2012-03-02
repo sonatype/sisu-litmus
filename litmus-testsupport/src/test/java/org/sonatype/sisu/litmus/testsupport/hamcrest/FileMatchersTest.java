@@ -14,7 +14,6 @@ package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import java.io.IOException;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
 import org.junit.Before;
@@ -30,11 +29,11 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 /**
- *
  * @author plynch
  */
 public class FileMatchersTest
-    extends TestSupport{
+    extends TestSupport
+{
 
     private static File REAL_FILE;
 
@@ -43,117 +42,136 @@ public class FileMatchersTest
     private static File NON_EXISTING_FILE;
 
     @Before
-    public void setupFiles() throws Exception {
-        REAL_FILE = new File(util.getBaseDir(), "pom.xml");
-        assertThat(REAL_FILE.isFile(), is(true));
-        assertThat(REAL_FILE.canRead(), is(true));
-        assertThat(REAL_FILE.canWrite(), is(true));
+    public void setupFiles()
+        throws Exception
+    {
+        REAL_FILE = new File( util.getBaseDir(), "pom.xml" );
+        assertThat( REAL_FILE.isFile(), is( true ) );
+        assertThat( REAL_FILE.canRead(), is( true ) );
+        assertThat( REAL_FILE.canWrite(), is( true ) );
 
-
-        REAL_DIR = new File(System.getProperty("basedir"));
-        assertThat(REAL_DIR.isDirectory(), is(true));
-        NON_EXISTING_FILE = new File(REAL_DIR, "/DOESNOTEXIST");
-        assertThat(NON_EXISTING_FILE.exists(), is(false));
+        REAL_DIR = new File( System.getProperty( "basedir" ) );
+        assertThat( REAL_DIR.isDirectory(), is( true ) );
+        NON_EXISTING_FILE = new File( REAL_DIR, "/DOESNOTEXIST" );
+        assertThat( NON_EXISTING_FILE.exists(), is( false ) );
     }
 
     @Test
-    public void isDirectoryMatchesDirectory() {
-        assertThat(REAL_DIR, FileMatchers.isDirectory());
+    public void isDirectoryMatchesDirectory()
+    {
+        assertThat( REAL_DIR, FileMatchers.isDirectory() );
     }
 
     @Test
-    public void isDirectoryDoesNotMatchFile() {
-        assertThat(REAL_FILE, not(FileMatchers.isDirectory()));
+    public void isDirectoryDoesNotMatchFile()
+    {
+        assertThat( REAL_FILE, not( FileMatchers.isDirectory() ) );
     }
 
     @Test
-    public void isFileDoesNotMatchDirectory() {
-        assertThat(REAL_DIR, not(FileMatchers.isFile()));
+    public void isFileDoesNotMatchDirectory()
+    {
+        assertThat( REAL_DIR, not( FileMatchers.isFile() ) );
     }
 
     @Test
-    public void isFileMatchesFile() {
-        assertThat(REAL_FILE, FileMatchers.isFile());
+    public void isFileMatchesFile()
+    {
+        assertThat( REAL_FILE, FileMatchers.isFile() );
     }
 
     @Test
-    public void existsFileThatDoesNotExist() {
-        assertThat(NON_EXISTING_FILE, not(FileMatchers.exists()));
+    public void existsFileThatDoesNotExist()
+    {
+        assertThat( NON_EXISTING_FILE, not( FileMatchers.exists() ) );
     }
 
     @Test
-    public void existsDirThatExists() {
-        assertThat(REAL_DIR, FileMatchers.exists());
+    public void existsDirThatExists()
+    {
+        assertThat( REAL_DIR, FileMatchers.exists() );
     }
 
     @Test
-    public void writableMatchesWritable() {
-        assertThat(REAL_FILE, FileMatchers.writable());
+    public void writableMatchesWritable()
+    {
+        assertThat( REAL_FILE, FileMatchers.writable() );
     }
 
     @Test
-    public void readableMatchesReadable() {
-        assertThat(REAL_FILE, FileMatchers.writable());
+    public void readableMatchesReadable()
+    {
+        assertThat( REAL_FILE, FileMatchers.writable() );
     }
 
     @Test
-    public void named() {
-        assertThat(REAL_FILE, FileMatchers.named("pom.xml"));
+    public void named()
+    {
+        assertThat( REAL_FILE, FileMatchers.named( "pom.xml" ) );
     }
 
     @Test
-    public void withCanonicalPath() {
-        assertThat(REAL_FILE, not(FileMatchers.withCanonicalPath("pom.xml")));
+    public void withCanonicalPath()
+    {
+        assertThat( REAL_FILE, not( FileMatchers.withCanonicalPath( "pom.xml" ) ) );
     }
 
     @Test
-    public void withAbsolutePath() {
-        assertThat(REAL_FILE, not(FileMatchers.withAbsolutePath("pom.xml")));
-    }
-
-
-    @Test
-    public void sizedWithMatcher() {
-        assertThat(REAL_FILE, FileMatchers.sized(Matchers.greaterThan(100L)));
+    public void withAbsolutePath()
+    {
+        assertThat( REAL_FILE, not( FileMatchers.withAbsolutePath( "pom.xml" ) ) );
     }
 
     @Test
-    public void sizedStandalone() {
-        File sizedFile = new File(REAL_DIR, "src/test/resources/sized_file.txt");
-        assertThat(sizedFile, FileMatchers.exists());
-        assertThat(sizedFile, FileMatchers.sized(21L));
+    public void sizedWithMatcher()
+    {
+        assertThat( REAL_FILE, FileMatchers.sized( Matchers.greaterThan( 100L ) ) );
     }
 
     @Test
-    public void contains() {
-        File file = new File(REAL_DIR, "src/test/resources/file.properties");
-        assertThat(file, FileMatchers.contains("x=y", "foo=bar"));
+    public void sizedStandalone()
+    {
+        File sizedFile = new File( REAL_DIR, "src/test/resources/sized_file.txt" );
+        assertThat( sizedFile, FileMatchers.exists() );
+        assertThat( sizedFile, FileMatchers.sized( 21L ) );
     }
 
     @Test
-    public void doesNotContain() {
-        File file = new File(REAL_DIR, "src/test/resources/file.properties");
-        assertThat(file, FileMatchers.doesNotContain("y=x", "bar=foo"));
+    public void contains()
+    {
+        File file = new File( REAL_DIR, "src/test/resources/file.properties" );
+        assertThat( file, FileMatchers.contains( "x=y", "foo=bar" ) );
     }
 
     @Test
-    public void containsOnly() {
-        File file = new File(REAL_DIR, "src/test/resources/sized_file.txt");
-        assertThat(file, FileMatchers.containsOnly("A File of fixed size\n"));
+    public void doesNotContain()
+    {
+        File file = new File( REAL_DIR, "src/test/resources/file.properties" );
+        assertThat( file, FileMatchers.doesNotContain( "y=x", "bar=foo" ) );
     }
 
     @Test
-    public void containsEntry() throws IOException {
-        File file = new File(REAL_DIR, "src/test/resources/test.jar");
-        assertThat(new ZipFile(file), FileMatchers.containsEntry("META-INF/MANIFEST.MF"));
-        assertThat(new ZipFile(file), FileMatchers.containsEntry("META-INF/"));
+    public void containsOnly()
+    {
+        File file = new File( REAL_DIR, "src/test/resources/sized_file.txt" );
+        assertThat( file, FileMatchers.containsOnly( "A File of fixed size\n" ) );
     }
-    
+
     @Test
-    public void containsEntryDescription() {
+    public void containsEntry()
+        throws IOException
+    {
+        File file = new File( REAL_DIR, "src/test/resources/test.jar" );
+        assertThat( new ZipFile( file ), FileMatchers.containsEntry( "META-INF/MANIFEST.MF" ) );
+        assertThat( new ZipFile( file ), FileMatchers.containsEntry( "META-INF/" ) );
+    }
+
+    @Test
+    public void containsEntryDescription()
+    {
         final StringDescription description = new StringDescription();
-        FileMatchers.containsEntry("containsEntryDescription").describeTo(description);
-        assertThat(description.toString(), containsString("containsEntryDescription"));
+        FileMatchers.containsEntry( "containsEntryDescription" ).describeTo( description );
+        assertThat( description.toString(), containsString( "containsEntryDescription" ) );
     }
 
     @Test
