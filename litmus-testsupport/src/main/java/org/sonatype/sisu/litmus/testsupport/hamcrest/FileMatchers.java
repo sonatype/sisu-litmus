@@ -646,6 +646,9 @@ public class FileMatchers
         };
     }
 
+    /**
+     * @since 1.2
+     */
     @Factory
     public static Matcher<? super File> matchSha1( File file )
         throws IOException
@@ -679,15 +682,23 @@ public class FileMatchers
             @Override
             public void describeTo( Description description )
             {
-                description.appendText( "File " );
-                description.appendValue( file );
+                if ( file != null )
+                {
+                    description.appendText( "File " );
+                    description.appendValue( file );
+                }
                 description.appendText( "with sha1 " );
                 description.appendValue( expectedSha1 );
             }
 
             @Override
-            protected void describeMismatchSafely( File item, Description description )
+            protected void describeMismatchSafely( File file, Description description )
             {
+                if ( file != null )
+                {
+                    description.appendText( "File " );
+                    description.appendValue( file );
+                }
                 description.appendText( "was " );
                 description.appendValue( sha1 );
             }
