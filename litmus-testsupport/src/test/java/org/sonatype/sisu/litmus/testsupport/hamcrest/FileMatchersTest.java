@@ -12,21 +12,20 @@
  */
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+
+import java.io.File;
 import java.io.IOException;
+import java.util.zip.ZipFile;
 
 import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
-
-import java.io.File;
-
-import java.util.zip.ZipFile;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 /**
  * @author plynch
@@ -184,6 +183,15 @@ public class FileMatchersTest
         File dir = new File( REAL_DIR, "target/temp/dir" );
         dir.mkdirs();
         assertThat( dir, FileMatchers.isEmpty() );
+    }
+
+    @Test
+    public void matchSha1()
+        throws IOException
+    {
+        File sizedFile = new File( REAL_DIR, "src/test/resources/sized_file.txt" );
+        assertThat( sizedFile, FileMatchers.matchSha1( "5ac7a73e644f48918b98531f9cd08a3e063b91a1" ) );
+        assertThat( sizedFile, not( FileMatchers.matchSha1( "123" ) ) );
     }
 
 }
