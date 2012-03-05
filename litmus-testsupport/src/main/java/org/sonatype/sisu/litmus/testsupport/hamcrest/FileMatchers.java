@@ -682,9 +682,9 @@ public class FileMatchers
             @Override
             public void describeTo( Description description )
             {
+                description.appendText( "File " );
                 if ( file != null )
                 {
-                    description.appendText( "File " );
                     description.appendValue( file );
                 }
                 description.appendText( "with sha1 " );
@@ -694,9 +694,9 @@ public class FileMatchers
             @Override
             protected void describeMismatchSafely( File file, Description description )
             {
+                description.appendText( "File " );
                 if ( file != null )
                 {
-                    description.appendText( "File " );
                     description.appendValue( file );
                 }
                 description.appendText( "was " );
