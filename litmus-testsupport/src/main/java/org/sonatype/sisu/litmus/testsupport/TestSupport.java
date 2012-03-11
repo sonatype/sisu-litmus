@@ -17,7 +17,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.MethodRule;
 import org.junit.rules.TestName;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
@@ -39,7 +38,7 @@ public class TestSupport
     private Level logLevel = Level.INFO;
 
     @Rule
-    public final MethodRule tracer = new TestTracer( this );
+    public final TestTracer tracer = new TestTracer( this );
 
     /**
      * Test method utilities.

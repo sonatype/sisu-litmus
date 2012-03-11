@@ -13,8 +13,9 @@
 package org.sonatype.sisu.litmus.testsupport;
 
 import org.jetbrains.annotations.NonNls;
-import org.junit.internal.runners.model.MultipleFailureException;
-import org.junit.rules.TestWatchman;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+import org.junit.runners.model.MultipleFailureException;
 import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,10 @@ import static java.lang.String.format;
  * @since 1.0
  */
 public class TestTracer
-    extends TestWatchman
+    extends TestWatcher
 {
+    private static final String UNKNOWN_METHOD_NAME = "UNKNOWN METHOD NAME";
+
     @NonNls
     private final Logger logger;
 
@@ -50,32 +53,33 @@ public class TestTracer
         return this;
     }
 
-    private String prefix(final FrameworkMethod method) {
-        return format("TEST %s", method.getName()); //NON-NLS
+    private String prefix(final Description desc) {
+        return format("TEST %s", desc == null ? UNKNOWN_METHOD_NAME : desc.getMethodName());
+    }
+
+
+    @Override
+    public void starting(final Description desc) {
+        level.log(logger, "{} STARTING", prefix(desc));
     }
 
     @Override
-    public void starting(final FrameworkMethod method) {
-        level.log(logger, "{} STARTING", prefix(method));
+    public void succeeded(final Description desc) {
+        level.log(logger, "{} SUCCEEDED", prefix(desc));
     }
 
     @Override
-    public void succeeded(final FrameworkMethod method) {
-        level.log(logger, "{} SUCCEEDED", prefix(method));
-    }
-
-    @Override
-    public void failed(final Throwable e, final FrameworkMethod method) {
+    public void failed(final Throwable e, final Description desc) {
         if(e instanceof MultipleFailureException){
             MultipleFailureException mfe = (MultipleFailureException) e;
-            level.log(logger, "{} FAILED {} {}", prefix(method), e, mfe.getFailures());
+            level.log(logger, "{} FAILED {} {}", prefix(desc), e, mfe.getFailures());
         } else {
-            level.log(logger, "{} FAILED", prefix(method), e);
+            level.log(logger, "{} FAILED", prefix(desc), e);
         }
     }
 
     @Override
-    public void finished(final FrameworkMethod method) {
-        level.log(logger, "{} FINISHED", prefix(method));
+    public void finished(final Description desc) {
+        level.log(logger, "{} FINISHED", prefix(desc));
     }
 }
