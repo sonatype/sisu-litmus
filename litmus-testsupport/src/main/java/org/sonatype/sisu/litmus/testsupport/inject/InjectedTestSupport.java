@@ -14,16 +14,9 @@
 package org.sonatype.sisu.litmus.testsupport.inject;
 
 import com.google.common.base.Preconditions;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
-import java.util.Properties;
-
 import org.jetbrains.annotations.NonNls;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.MethodRule;
 import org.junit.rules.TestName;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
@@ -31,6 +24,12 @@ import org.sonatype.gossip.Level;
 import org.sonatype.guice.bean.containers.InjectedTest;
 import org.sonatype.sisu.litmus.testsupport.TestTracer;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
  * Support for injection-based tests.
@@ -58,7 +57,7 @@ public class InjectedTestSupport
     private Level logLevel = Level.INFO;
 
     @Rule
-    public final MethodRule tracer = new TestTracer(this);
+    public final TestTracer tracer = new TestTracer(this);
 
     @Rule
     public final TestName testName = new TestName();
