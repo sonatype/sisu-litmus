@@ -160,6 +160,12 @@
                 <groupId>org.powermock</groupId>
                 <artifactId>powermock-api-mockito</artifactId>
                 <version>${powermockVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>mockito-all</artifactId>
+                        <groupId>org.mockito</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -270,6 +276,13 @@
                                         <exclude>commons-logging:commons-logging</exclude>
                                         <exclude>commons-logging:commons-logging-api</exclude>
                                     </excludes>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <searchTransitive>true</searchTransitive>
+                                    <excludes>
+                                        <exclude>org.mockito:mockito-all</exclude>
+                                    </excludes>
+                                    <message>mockito-all includes third party classes within it - depend on mockito-core instead</message>
                                 </bannedDependencies>
                             </rules>
                         </configuration>
