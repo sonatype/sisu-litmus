@@ -12,12 +12,13 @@
  */
 package org.sonatype.sisu.litmus.testsupport;
 
-import org.junit.rules.TestWatchman;
+import org.junit.runner.Description;
 import org.junit.runners.model.FrameworkMethod;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.junit.rules.TestWatcher;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
@@ -25,9 +26,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @since 1.0
  */
-public class TestMethod extends TestWatchman {
+public class TestMethod extends TestWatcher {
 
     private static final String SRC_TEST = "src/test";
+    
     /**
      * Test util.
      */
@@ -53,8 +55,8 @@ public class TestMethod extends TestWatchman {
      * @since 1.0
      */
     @Override
-    public void starting(FrameworkMethod method) {
-        name = method.getName();
+    protected void starting(Description description) {
+        name = description.getMethodName();
     }
 
     /**
