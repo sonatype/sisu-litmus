@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NonNls;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runners.model.MultipleFailureException;
-import org.junit.runners.model.FrameworkMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonatype.gossip.Level;
@@ -53,33 +52,43 @@ public class TestTracer
         return this;
     }
 
-    private String prefix(final Description desc) {
+    /**
+     * @since 1.3
+     */
+    protected String prefix(final Description desc) {
         return format("TEST %s", desc == null ? UNKNOWN_METHOD_NAME : desc.getMethodName());
     }
 
+    /**
+     * @since 1.3
+     */
+    protected void log(String message, Object... args) {
+        level.log(logger, message, args);
+    }
 
     @Override
     public void starting(final Description desc) {
-        level.log(logger, "{} STARTING", prefix(desc));
+        log("{} STARTING", prefix(desc));
     }
 
     @Override
     public void succeeded(final Description desc) {
-        level.log(logger, "{} SUCCEEDED", prefix(desc));
+        log("{} SUCCEEDED", prefix(desc));
     }
 
     @Override
     public void failed(final Throwable e, final Description desc) {
-        if(e instanceof MultipleFailureException){
+        if (e instanceof MultipleFailureException) {
             MultipleFailureException mfe = (MultipleFailureException) e;
-            level.log(logger, "{} FAILED {} {}", prefix(desc), e, mfe.getFailures());
-        } else {
-            level.log(logger, "{} FAILED", prefix(desc), e);
+            log("{} FAILED {} {}", prefix(desc), e, mfe.getFailures());
+        }
+        else {
+            log("{} FAILED", prefix(desc), e);
         }
     }
 
     @Override
     public void finished(final Description desc) {
-        level.log(logger, "{} FINISHED", prefix(desc));
+        log("{} FINISHED", prefix(desc));
     }
 }
