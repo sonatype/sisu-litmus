@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport.mock;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
@@ -28,7 +29,9 @@ import org.mockito.Spy;
 
 /**
  * Here we test MockitoRule actually initializes mock objects as we expect.
- *
+ * <p>
+ * Note: @InjectMocks only is supposed to work with @Spy , not @Mock
+ * </p>
  * @since 1.3
  */
 public class MockitoRuleTest {
@@ -36,11 +39,15 @@ public class MockitoRuleTest {
     @Rule
     public MockitoRule mockitoRule = new MockitoRule(this);
 
+
     @Mock
-    private HashMap<String, String> mockedMap;
+    private HashMap mockedMap;
 
     @Spy
     private LinkedHashMap<String, String> spyMap;
+
+    @Spy
+    private HashSet<String> spySet;
 
     @Captor
     private ArgumentCaptor<String> captor;
@@ -75,6 +82,8 @@ public class MockitoRuleTest {
     @Test
     public void membersWithSpyAnnotationWereMocked() throws Exception {
         assertThat(spyMap, notNullValue());
+        assertThat(spySet, notNullValue());
+
     }
 
     @Test
@@ -86,21 +95,20 @@ public class MockitoRuleTest {
     public void membersWithInjectMocksWereInjectedWithMocksBySetter() throws Exception {
         assertThat(propertyBean, notNullValue());
         assertThat(propertyBean.getSpyMap(), sameInstance(spyMap));
-        assertThat(propertyBean.getMockedMap(), sameInstance(mockedMap));
+        assertThat(propertyBean.getSpySet(), sameInstance(spySet));
     }
 
     @Test
     public void membersWithInjectMocksWereInjectedWithMocksByProperty() throws Exception {
         assertThat(fieldBean, notNullValue());
         assertThat(fieldBean.getSpyMap(), sameInstance(spyMap));
-        assertThat(fieldBean.getMockedMap(), sameInstance(mockedMap));
+        assertThat(fieldBean.getSpySet(), sameInstance(spySet));
     }
 
     @Test
-    @Ignore("FIXME: This test randomly fails in certain environments")
     public void membersWithInjectMocksWereInjectedWithMocksByConstructor() throws Exception {
         assertThat(constructorBean, notNullValue());
         assertThat(constructorBean.getSpyMap(), sameInstance(spyMap));
-        assertThat(constructorBean.getMockedMap(), sameInstance((HashMap)mockedMap));
+        assertThat(constructorBean.getSpySet(), sameInstance(spySet));
     }
 }

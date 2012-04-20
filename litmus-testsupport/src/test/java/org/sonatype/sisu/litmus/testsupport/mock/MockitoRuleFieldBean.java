@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport.mock;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import org.mockito.ArgumentCaptor;
 
@@ -23,20 +24,19 @@ import org.mockito.ArgumentCaptor;
  */
 public class MockitoRuleFieldBean {
 
-    private HashMap<String, String> mockedMap;
+    private HashSet<String> spySet;
     private LinkedHashMap<String, String> spyMap;
     private ArgumentCaptor<String> captor;
 
     public MockitoRuleFieldBean() {
     }
 
-
     public ArgumentCaptor<String> getCaptor() {
         return captor;
     }
 
-    public HashMap<String, String> getMockedMap() {
-        return mockedMap;
+    public HashSet<String> getSpySet() {
+        return spySet;
     }
 
     public LinkedHashMap<String, String> getSpyMap() {

@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport.mock;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 /**
@@ -22,7 +23,7 @@ import java.util.LinkedHashMap;
  */
 public class MockitoRulePropertyBean {
 
-    private HashMap<String, String> mockedMap;
+    private HashSet<String> spySet;
     private LinkedHashMap<String, String> spyMap;
 
     // no-arg constructor required for setter inject
@@ -33,12 +34,12 @@ public class MockitoRulePropertyBean {
         this.spyMap = spyMap;
     }
 
-    public void setMockedMap(HashMap<String, String> mockedMap) {
-        this.mockedMap = mockedMap;
+    public void setSpySet(HashSet<String> spySet) {
+        this.spySet = spySet;
     }
 
-    public HashMap<String, String> getMockedMap() {
-        return mockedMap;
+    public HashSet<String> getSpySet() {
+        return spySet;
     }
 
     public LinkedHashMap<String, String> getSpyMap() {
