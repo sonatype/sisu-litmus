@@ -61,7 +61,7 @@
 
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-        <powermockVersion>1.4.9</powermockVersion>
+        <powermockVersion>1.4.12</powermockVersion>
     </properties>
 
     <dependencyManagement>
