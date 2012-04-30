@@ -181,8 +181,6 @@ public class FileMatchersTest
     @Test
     public void isEmptyDirectoryFailsOnNonEmptyDirectory()
             throws IOException {
-        // simulate IOException by trickery since file needs to directory but list() still return null
-        // bypasses case where a 'file' was given instead of directory which would have also caused list() to return null
         when(mockFile.list()).thenReturn(new String[]{"foo.txt", "bar"});
         when(mockFile.isDirectory()).thenReturn(true);
         // sugar
