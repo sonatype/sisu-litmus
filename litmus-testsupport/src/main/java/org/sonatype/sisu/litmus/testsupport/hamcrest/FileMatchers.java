@@ -37,7 +37,7 @@ import org.hamcrest.TypeSafeMatcher;
  * Some ideas copied freely from http://www.time4tea.net/wiki/display/MAIN/Testing+Files+with+Hamcrest
  * <p>
  * Converted to pure Hamcrest
- * 
+ *
  * @author time4tea technology ltd 2007
  * @author plynch
  */
@@ -556,7 +556,7 @@ public class FileMatchers
 
     /**
      * Read from file till EOF. FIXME: why is this here? move to util class, this class for Matchers only
-     * 
+     *
      * @param file the file from which to read
      * @return the contents read out of the given file
      * @throws IOException if the contents could not be read out from the reader.
@@ -581,7 +581,7 @@ public class FileMatchers
 
     /**
      * Read from reader till EOF. FIXME: why is this here? move to util class, this class for Matchers only
-     * 
+     *
      * @param rdr the reader from which to read.
      * @return the contents read out of the given reader.
      * @throws IOException if the contents could not be read out from the reader.
@@ -594,7 +594,7 @@ public class FileMatchers
 
     /**
      * Read from reader till EOF. FIXME: why is this here? move to util class, this class for Matchers only
-     * 
+     *
      * @param rdr the reader from which to read.
      * @param bufferSize the buffer size to use when reading.
      * @return the contents read out of the given reader.
@@ -623,24 +623,55 @@ public class FileMatchers
     }
 
     /**
+     * @deprecated Use better named and more robust {@link #isEmptyDirectory()} instead. This will be removed in next version.
+     */
+    @Deprecated
+    public static Matcher<? super File> isEmpty()
+    {
+        return isEmptyDirectory();
+    }
+
+    /**
+     * Will only assert true if checking a directory, that directory's contents can be listed, and the directory is in fact empty.
+     * @since 1.3
      * @return a matcher that checks if a File (directory) is empty!
      */
-    public static Matcher<? super File> isEmpty()
+    public static Matcher<? super File> isEmptyDirectory()
     {
         return new TypeSafeMatcher<File>()
         {
-            String[] files;
+            private File dir;
+            private String[] files;
 
-            public boolean matchesSafely( File item )
+            public boolean matchesSafely( final File item )
             {
-                files = item.list();
-                return files.length == 0;
+                this.dir = item;
+                this.files = item.list();
+                return files != null && files.length == 0;
             }
 
-            public void describeTo( Description description )
+            public void describeTo( final Description description )
             {
-                description.appendText( " files found " );
-                description.appendValue( files );
+                if(!dir.isDirectory()){
+                    description.appendText( "a directory" );
+                } else {
+                    description.appendText( "an empty directory" );
+                }
+            }
+
+            @Override
+            protected void describeMismatchSafely( final File item, final Description mismatchDescription )
+            {
+                if(!this.dir.isDirectory()){
+                    mismatchDescription.appendText("found a non directory at ")
+                        .appendValue( this.dir.getAbsolutePath() );
+                } else if (this.files == null){
+                    mismatchDescription.appendText("there was an IO problem reading the contents of ")
+                        .appendValue(this.dir.getAbsolutePath());
+                } else {
+                    mismatchDescription.appendText( "directory " ).appendValue( this.dir.getAbsolutePath())
+                        .appendText(" contained ").appendValueList("\n", "\n", "", this.files);
+                }
             }
         };
     }

@@ -16,6 +16,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.startsWith;
+import static org.hamcrest.Matchers.typeCompatibleWith;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,8 +26,13 @@ import java.util.zip.ZipFile;
 import org.hamcrest.Matchers;
 import org.hamcrest.StringDescription;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
+import org.sonatype.sisu.litmus.testsupport.mock.MockitoRule;
+
+import static org.mockito.Mockito.*;
 
 /**
  * @author plynch
@@ -33,12 +40,16 @@ import org.sonatype.sisu.litmus.testsupport.TestSupport;
 public class FileMatchersTest
     extends TestSupport
 {
+    public MockitoRule MockitoRule = new MockitoRule(this);
 
     private static File REAL_FILE;
 
     private static File REAL_DIR;
 
     private static File NON_EXISTING_FILE;
+
+    @Mock
+    private File mockFile;
 
     @Before
     public void setupFiles()
@@ -174,16 +185,66 @@ public class FileMatchersTest
     }
 
     @Test
-    public void isEmpty()
+    public void isEmptyDirectory()
         throws IOException
     {
-        File baseDir = new File( REAL_DIR, "src/test/resources/" );
-        assertThat( baseDir, not( FileMatchers.isEmpty() ) );
-
-        File dir = new File( REAL_DIR, "target/temp/dir" );
-        dir.mkdirs();
-        assertThat( dir, FileMatchers.isEmpty() );
+        when(mockFile.list()).thenReturn(new String[]{});
+        when(mockFile.isDirectory()).thenReturn(true);
+        // sugar
+        when(mockFile.getAbsolutePath()).thenReturn("/mydir");
+        assertThat( mockFile, FileMatchers.isEmptyDirectory() );
     }
+
+    @Test
+    public void isEmptyDirectoryFailsOnNonDirectory()
+        throws IOException
+    {
+        try{
+            assertThat( REAL_FILE, FileMatchers.isEmptyDirectory() );
+        } catch (AssertionError ae){
+            assertThat( ae.getMessage(), startsWith( "\nExpected: a directory\n     but: found a non directory at" ));
+        }
+    }
+
+    @Test
+    public void isEmptyDirectoryFailsOnNonEmptyDirectory()
+        throws IOException
+    {
+        // simulate IOException by trickery since file needs to directory but list() still return null
+        // bypasses case where a 'file' was given instead of directory which would have also caused list() to return null
+        when(mockFile.list()).thenReturn(new String[]{"foo.txt", "bar"});
+        when(mockFile.isDirectory()).thenReturn(true);
+        // sugar
+        when(mockFile.getAbsolutePath()).thenReturn("/mydir");
+
+        try{
+            assertThat( mockFile, FileMatchers.isEmptyDirectory() );
+        } catch (AssertionError ae){
+            assertThat( ae.getMessage(), startsWith( "\nExpected: an empty directory"
+            + "\n     but: directory \"/mydir\" contained "
+            + "\n\"foo.txt\""
+            + "\n\"bar\""));
+        }
+    }
+
+    @Test
+    public void isEmptyDirectoryFailsOnIOExceptionReadingDirectoryList()
+        throws IOException
+    {
+        // simulate IOException by trickery since file needs to directory but list() still return null
+        // bypasses case where a 'file' was given instead of directory which would have also caused list() to return null
+        when(mockFile.list()).thenReturn(null);
+        when(mockFile.isDirectory()).thenReturn(true);
+        // sugar
+        when(mockFile.getAbsolutePath()).thenReturn("/mydir");
+
+        try{
+            assertThat( mockFile, FileMatchers.isEmptyDirectory() );
+        } catch (AssertionError ae){
+            assertThat( ae.getMessage(), startsWith("\nExpected: an empty directory\n     but: there was an IO problem reading the contents of \"/mydir\"" ));
+        }
+    }
+
 
     @Test
     public void matchSha1()
