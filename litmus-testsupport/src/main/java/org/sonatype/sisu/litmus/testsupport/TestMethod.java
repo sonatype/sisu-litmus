@@ -29,7 +29,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TestMethod extends TestWatcher {
 
     private static final String SRC_TEST = "src/test";
-    
+
     /**
      * Test util.
      */
@@ -63,7 +63,9 @@ public class TestMethod extends TestWatcher {
      * Returns the name of the currently-running test method
      *
      * @return the name of the currently-running test method
+     * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestInfoRule#getMethodName()} instead.
      */
+    @Deprecated()
     public String getName() {
         return name;
     }
@@ -124,7 +126,7 @@ public class TestMethod extends TestWatcher {
      * @param root root directory
      * @param path path to be appended
      * @return test source directory specific to running test + provided path
-     * @since 1.10.0
+     * @since 1.0
      */
     private File testSourceDirectory(final File root, final String path) {
         return file(root, path);
@@ -138,7 +140,7 @@ public class TestMethod extends TestWatcher {
      * @param root root directory
      * @param path path to be appended
      * @return test source directory specific to running test class + provided path
-     * @since 1.10.0
+     * @since 1.0
      */
     private File testPackageSourceDirectory(final File root, final String path) {
         return file(root, asPath(util.owner.getPackage()), path);
@@ -152,7 +154,7 @@ public class TestMethod extends TestWatcher {
      * @param root root directory
      * @param path path to be appended
      * @return test source directory specific to running test class + provided path
-     * @since 1.10.0
+     * @since 1.0
      */
     private File testClassSourceDirectory(final File root, final String path) {
         return file(root, asPath(util.owner), path);
@@ -166,7 +168,7 @@ public class TestMethod extends TestWatcher {
      * @param root root directory
      * @param path path to be appended
      * @return test source directory specific to running test method + provided path
-     * @since 1.10.0
+     * @since 1.0
      */
     private File testMethodSourceDirectory(final File root, final String path) {
         return file(root, asPath(util.owner), getName(), path);
@@ -200,7 +202,7 @@ public class TestMethod extends TestWatcher {
      * @param root  starting root
      * @param paths paths to append
      * @return a file starting from root and appended sub-paths
-     * @since 1.10.0
+     * @since 1.0
      */
     private static File file(final File root, final String... paths) {
         File file = root;
