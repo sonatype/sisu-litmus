@@ -1,16 +1,18 @@
 package org.sonatype.sisu.litmus.testsupport.junit;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 import org.junit.ClassRule;
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 import org.junit.Rule;
 import org.junit.Test;
-import org.sonatype.sisu.litmus.testsupport.junit.TestInfoRule;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Test {@link org.sonatype.sisu.litmus.testsupport.junit.TestInfoRule}
+ *
  * @since 1.3
  */
 @TestInfoRuleTest.ValuedAnnotation("test class annotation for testing TestInfoRule.getAnnotation()")
@@ -20,9 +22,9 @@ public class TestInfoRuleTest {
      * Annotation for testing TestInfoRule.getAnnotation(Class c)
      */
     @Retention(RetentionPolicy.RUNTIME)
-	public @interface ValuedAnnotation {
-		String value();
-	}
+    public @interface ValuedAnnotation {
+        String value();
+    }
 
     @Rule
     public TestInfoRule infoRule = new TestInfoRule();
@@ -41,9 +43,9 @@ public class TestInfoRuleTest {
         assertThat(infoRule.getDisplayName(), equalTo("testRule(org.sonatype.sisu.litmus.testsupport.junit.TestInfoRuleTest)"));
         assertThat(infoRule.getTestClass().getCanonicalName(), equalTo("org.sonatype.sisu.litmus.testsupport.junit.TestInfoRuleTest"));
         assertThat(infoRule.getAnnotations(), hasSize(2)); // checking for annotations on this test method
-        assertThat(infoRule.getAnnotation( Test.class ), notNullValue());
-        assertThat( infoRule.getAnnotation( ValuedAnnotation.class ).value(),
-                    equalTo( "test method annotation for testing TestInfoRule.getAnnotation()" ) );
+        assertThat(infoRule.getAnnotation(Test.class), notNullValue());
+        assertThat(infoRule.getAnnotation(ValuedAnnotation.class).value(),
+                equalTo("test method annotation for testing TestInfoRule.getAnnotation()"));
     }
 
     @Test
