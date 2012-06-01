@@ -18,14 +18,14 @@ import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 
 /**
- * TODO
+ * Matchers builder for diff between strings (text file like).
  *
  * @since 1.0
  */
 public class DiffMatchers {
 
     /**
-     * TODO
+     * Diff between two strings.
      *
      * @since 1.0
      */
@@ -84,7 +84,7 @@ public class DiffMatchers {
     }
 
     /**
-     * TODO
+     * Tests that two strings are equal, displaying a fancy diff if they are not.
      *
      * @since 1.0
      */
@@ -94,7 +94,7 @@ public class DiffMatchers {
     }
 
     /**
-     * TODO
+     * Tests that two strings are equal, displaying only a fancy diff if they are not.
      *
      * @since 1.0
      */

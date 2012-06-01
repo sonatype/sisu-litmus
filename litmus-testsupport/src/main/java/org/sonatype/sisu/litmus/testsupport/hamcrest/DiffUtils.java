@@ -32,7 +32,7 @@ public class DiffUtils {
 
 
     /**
-     * TODO
+     * Returns a visual diff between two strings (text file like strings).
      *
      * @since 1.0
      */
