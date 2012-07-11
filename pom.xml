@@ -185,7 +185,8 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-
+           <!-- we need to followup and see if we can push this to central to allowing easier consumption of litmus outside sonatype -->
+           <!-- http://code.google.com/p/junit-ext/issues/detail?id=4 -->
             <dependency>
                 <groupId>com.googlecode.junit-ext</groupId>
                 <artifactId>junit-ext</artifactId>
