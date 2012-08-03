@@ -20,6 +20,8 @@ import com.sun.net.ssl.internal.ssl.X509ExtendedTrustManager;
 /**
  * A very naive TrustManager.
  * Trusts every certificate it comes across.
+ *
+ * @since 1.4
  */
 public class TrustingX509TrustManager
     extends X509ExtendedTrustManager

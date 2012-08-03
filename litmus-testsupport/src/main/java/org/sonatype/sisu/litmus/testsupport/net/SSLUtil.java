@@ -19,6 +19,8 @@ import com.google.common.base.Throwables;
 
 /**
  * SSL utility class.
+ *
+ * @since 1.4
  */
 public class SSLUtil
 {
