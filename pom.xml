@@ -364,6 +364,7 @@
                         <include>**/*.proto</include>
                         <include>**/*.sm</include>
                         <include>**/*.bat</include>
+                        <include>**/*.xsl</include>
                     </includes>
                     <excludes>
                         <exclude>**/target/**</exclude>
