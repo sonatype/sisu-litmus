@@ -27,6 +27,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @since 1.0
  * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestDataRule} instead.
  */
+@Deprecated()
 public class TestMethod extends TestWatcher {
 
     private static final String SRC_TEST = "src/test";
@@ -81,6 +82,7 @@ public class TestMethod extends TestWatcher {
      * @return directory specific to running test method + provided path
      * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestIndexRule#getDirectory(String)} instead.
      */
+    @Deprecated()
     public File getTargetDirMethodFile(final String root, String path) {
         return file(util.getTargetDir(), root, asPath(getClass()), getName(), path);
     }
@@ -101,6 +103,7 @@ public class TestMethod extends TestWatcher {
      * @since 1.0
      * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestDataRule#resolveFile(String)} instead.
      */
+    @Deprecated()
     public File resolveFile(final File root, final String path) throws FileNotFoundException {
         File level1 = testMethodSourceDirectory(root, path);
         if (level1.exists()) {
