@@ -20,6 +20,7 @@ import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.exists;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.isDirectory;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -85,6 +86,72 @@ public class TestIndexRuleTest
         underTest.recordInfo( "info", "some info to be recorded" );
         underTest.save();
         assertThat( new File( indexRoot, "index.xml" ), contains( "some info to be recorded" ) );
+    }
+
+    /**
+     * Verifies that a relative path is recorded as info.
+     */
+    @Test
+    public void recordLinkAboutFileInIndexDir()
+    {
+        underTest.recordLink( "info", underTest.getDirectory( "some-dir" ) );
+        underTest.save();
+        assertThat( new File( indexRoot, "index.xml" ), contains( "some-dir" ) );
+    }
+
+    /**
+     * Verifies that a relative path is recorded as info.
+     */
+    @Test
+    public void recordLinkAboutFileNotInIndexDir()
+    {
+        final File file = util.resolveFile( "target/some-dir" );
+        file.mkdirs();
+        underTest.recordLink( "info", file );
+        underTest.save();
+        assertThat( new File( indexRoot, "index.xml" ), contains( "../some-dir" ) );
+    }
+
+    /**
+     * Calculate relative path from a dir to a sub dir.
+     */
+    @Test
+    public void relativePath01()
+        throws IOException
+    {
+        final File from = new File( "a/b/c" );
+        final File to = new File( "a/b/c/d" );
+
+        final String relativePath = TestIndexRule.calculateRelativePath( from, to );
+        assertThat( relativePath,is( equalTo( "d" ) ) );
+    }
+
+    /**
+     * Calculate relative path from a sub dir to a parent dir.
+     */
+    @Test
+    public void relativePath02()
+        throws IOException
+    {
+        final File from = new File( "a/b/c/d" );
+        final File to = new File( "a/b/c" );
+
+        final String relativePath = TestIndexRule.calculateRelativePath( from, to );
+        assertThat( relativePath,is( equalTo( ".." ) ) );
+    }
+
+    /**
+     * Calculate relative path from a sub dir to a sub dir or same parent dir.
+     */
+    @Test
+    public void relativePath03()
+        throws IOException
+    {
+        final File from = new File( "a/b/c/d" );
+        final File to = new File( "a/b/e/f" );
+
+        final String relativePath = TestIndexRule.calculateRelativePath( from, to );
+        assertThat( relativePath,is( equalTo( "../../e/f" ) ) );
     }
 
 }

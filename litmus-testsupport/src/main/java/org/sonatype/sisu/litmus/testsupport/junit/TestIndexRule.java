@@ -178,14 +178,11 @@ public class TestIndexRule
             initialize();
             try
             {
-                // TODO use a better algorithm to relativize
-                final String canonicalFile = file.getCanonicalPath();
-                final String canonicalDir = indexDir.getCanonicalPath();
-                recordLink( key, canonicalFile.substring( canonicalDir.length() + 1 ) );
+                recordLink( key, calculateRelativePath( indexDir, file ) );
             }
             catch ( IOException e )
             {
-                // TODO?
+                throw Throwables.propagate( e );
             }
         }
     }
@@ -295,6 +292,37 @@ public class TestIndexRule
             // TODO Should we fail the test if we cannot write the index?
             throw Throwables.propagate( e );
         }
+    }
+
+    /**
+     * Calculates the relative path to a given file from a specified file.
+     *
+     * @param from File from which the relative path should be calculated
+     * @param to   File to which the relative path should be calculated
+     * @return relative path
+     * @throws IOException if files have no common sub directories beside the root, or none at all
+     */
+    static String calculateRelativePath( final File from,
+                                         final File to )
+        throws IOException
+    {
+        final File parent = from.getParentFile();
+        if ( parent == null )
+        {
+            throw new IOException( "File '" + from.getAbsolutePath() + "' cannot be a root directory" );
+        }
+        final String fromPath = from.getCanonicalPath();
+        final String toPath = to.getCanonicalPath();
+        if ( toPath.equals( fromPath ) )
+        {
+            return "";
+        }
+        if ( toPath.startsWith( fromPath ) )
+        {
+            return toPath.substring( fromPath.length() + 1 );
+        }
+        final String relativePath = calculateRelativePath( parent, to );
+        return ( ".." + ( relativePath.trim().isEmpty() ? "" : File.separator + relativePath ) );
     }
 
 }
