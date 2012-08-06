@@ -25,6 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Test method related utilities.
  *
  * @since 1.0
+ * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestDataRule} instead.
  */
 public class TestMethod extends TestWatcher {
 
@@ -97,6 +98,7 @@ public class TestMethod extends TestWatcher {
      * @return found file
      * @throws java.io.FileNotFoundException if path cannot be found in any of above locations
      * @since 1.0
+     * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestDataRule#resolveFile(String)} instead.
      */
     public File resolveFile(final File root, final String path) throws FileNotFoundException {
         File level1 = testMethodSourceDirectory(root, path);
