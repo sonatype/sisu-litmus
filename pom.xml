@@ -200,6 +200,13 @@
                 <version>1.0-RC3</version>
                 <classifier>junit45</classifier>
             </dependency>
+
+            <dependency>
+              <groupId>commons-io</groupId>
+              <artifactId>commons-io</artifactId>
+              <version>1.4</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
