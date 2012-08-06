@@ -271,7 +271,8 @@ public class TestIndexRule
     /**
      * Saves index data from ${indexDir}/index.xml.
      */
-    private void save()
+    // @TestAccessible
+    void save()
     {
         try
         {
