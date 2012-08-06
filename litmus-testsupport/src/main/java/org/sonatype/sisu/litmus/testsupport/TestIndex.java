@@ -23,7 +23,7 @@ public interface TestIndex
 {
 
     /**
-     * Returns a test specific directory of format ${indexDir}/${counter}.
+     * Returns a test specific directory of format {@code <indexDir>/<counter>}.
      * If directory does not exist yet, it will be created.
      *
      * @return test specific directory
@@ -31,7 +31,7 @@ public interface TestIndex
     File getDirectory();
 
     /**
-     * Returns a test specific directory of format ${indexDir}/${counter}/${name}.
+     * Returns a test specific directory of format {@code <indexDir>/<counter>/<name>}.
      * If directory does not exist yet, it will be created.
      *
      * @param name name of test specific directory
