@@ -37,7 +37,55 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 
 /**
- * JUnit rule for indexing test related directories.
+ * JUnit rule for creating/accessing directories/files unique to a test method/run. The rule will create a mapping file
+ * (an index) to easy link the tests to its directories. The index file (index.xml) is created in the directory
+ * configured as root (see constructor}.
+ * <p/>
+ * How it works:
+ * <p/>
+ * When a test directory/file is requested, or an info/link is recorded, the rule will generate an directory unique to
+ * the test method that is running, which will be then used for all calls done during that specific test method/run.
+ * When the test method/run ends, the information specific to the test is written to index file (index.xml).
+ * <p/>
+ * So, for example in case of the following test:<br/>
+ * <pre class="code"><code class="java">
+ * public class SomeTest
+ * &nbsp;&nbsp;extends TestSupport
+ * {
+ * <br/>
+ * &nbsp;&nbsp;&#064;Rule
+ * &nbsp;&nbsp;public TestIndexRule index = new TestIndexRule( util.resolveFile( "target/example" ) );
+ * <br/>
+ * &nbsp;&nbsp;&#064;Test
+ * &nbsp;&nbsp;public void testFoo()
+ * &nbsp;&nbsp;{
+ * &nbsp;&nbsp;&nbsp;&nbsp;index.getDirectory( "foo" );
+ * &nbsp;&nbsp;}
+ * <br/>
+ * &nbsp;&nbsp;&#064;Test
+ * &nbsp;&nbsp;public void testBar()
+ * &nbsp;&nbsp;{
+ * &nbsp;&nbsp;&nbsp;&nbsp;index.getDirectory( "foo" );
+ * &nbsp;&nbsp;&nbsp;&nbsp;index.getDirectory( "bar" );
+ * &nbsp;&nbsp;}
+ * <br/>
+ * }
+ * </code></pre>
+ * The created structure on disk will look similar to:<br/>
+ * <pre class="code"><code class="text">
+ * target/example
+ * |
+ * |- 1
+ * |  |- foo
+ * |
+ * |- 2
+ * |  |- bar
+ * |  |- foo
+ * |
+ * |- ...
+ * index.xml
+ * </code></pre>
+ * The index file will contain the mappings between the numbered directories (1,2,...) and the test class/method.
  *
  * @since 1.4
  */
