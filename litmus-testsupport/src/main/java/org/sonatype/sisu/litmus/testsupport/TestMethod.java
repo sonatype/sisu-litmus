@@ -25,7 +25,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Test method related utilities.
  *
  * @since 1.0
+ * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestDataRule} instead.
  */
+@Deprecated()
 public class TestMethod extends TestWatcher {
 
     private static final String SRC_TEST = "src/test";
@@ -78,7 +80,9 @@ public class TestMethod extends TestWatcher {
      * @param root root name relative to target dir
      * @param path path to be appended to test method specific directory
      * @return directory specific to running test method + provided path
+     * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestIndexRule#getDirectory(String)} instead.
      */
+    @Deprecated()
     public File getTargetDirMethodFile(final String root, String path) {
         return file(util.getTargetDir(), root, asPath(getClass()), getName(), path);
     }
@@ -97,7 +101,9 @@ public class TestMethod extends TestWatcher {
      * @return found file
      * @throws java.io.FileNotFoundException if path cannot be found in any of above locations
      * @since 1.0
+     * @deprecated Use {@link org.sonatype.sisu.litmus.testsupport.junit.TestDataRule#resolveFile(String)} instead.
      */
+    @Deprecated()
     public File resolveFile(final File root, final String path) throws FileNotFoundException {
         File level1 = testMethodSourceDirectory(root, path);
         if (level1.exists()) {
