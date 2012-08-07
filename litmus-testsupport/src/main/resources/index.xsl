@@ -15,7 +15,7 @@
 -->
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:index="http://sonatype.com/xsd/nexus-testsuite-support/index/1.0">
+                xmlns:index="http://sonatype.com/xsd/litmus-testsupport/index/1.0">
 
   <xsl:template match="/">
     <html>

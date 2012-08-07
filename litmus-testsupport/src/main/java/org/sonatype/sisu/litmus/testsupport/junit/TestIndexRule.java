@@ -29,10 +29,10 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
-import org.sonatype.nexus.testsuite.support.index.IndexXO;
-import org.sonatype.nexus.testsuite.support.index.TestInfoXO;
-import org.sonatype.nexus.testsuite.support.index.TestXO;
 import org.sonatype.sisu.litmus.testsupport.TestIndex;
+import org.sonatype.sisu.litmus.testsupport.junit.index.IndexXO;
+import org.sonatype.sisu.litmus.testsupport.junit.index.TestInfoXO;
+import org.sonatype.sisu.litmus.testsupport.junit.index.TestXO;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 
