@@ -26,6 +26,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -37,6 +38,7 @@ import org.sonatype.sisu.litmus.testsupport.junit.index.IndexXO;
 import org.sonatype.sisu.litmus.testsupport.junit.index.TestInfoXO;
 import org.sonatype.sisu.litmus.testsupport.junit.index.TestXO;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
 
 /**
@@ -112,7 +114,7 @@ public class TestIndexRule
     /**
      * Timestamp when test was started.
      */
-    private long startTime;
+    private Stopwatch stopwatch;
 
     /**
      * True if the rule is initialized.
@@ -158,7 +160,7 @@ public class TestIndexRule
     protected void starting( final Description description )
     {
         this.description = Preconditions.checkNotNull( description );
-        this.startTime = System.currentTimeMillis();
+        this.stopwatch = new Stopwatch().start();
     }
 
     @Override
@@ -184,7 +186,7 @@ public class TestIndexRule
     protected void finished( final Description description )
     {
         initialize();
-        test.setDuration( ( System.currentTimeMillis() - startTime ) / 1000 );
+        test.setDuration( stopwatch.stop().elapsedTime( TimeUnit.SECONDS ) );
         save();
     }
 
