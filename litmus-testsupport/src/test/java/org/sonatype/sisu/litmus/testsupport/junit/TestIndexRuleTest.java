@@ -16,6 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.contains;
+import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.doesNotContain;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.exists;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.isDirectory;
 
@@ -36,6 +37,9 @@ public class TestIndexRuleTest
 {
 
     private File indexRoot = util.resolveFile( "target/test-index-rule" );
+
+    @Rule
+    public TestInfoRule testInfo = new TestInfoRule();
 
     @Rule
     public TestIndexRule underTest = new TestIndexRule( indexRoot );
@@ -83,9 +87,22 @@ public class TestIndexRuleTest
     @Test
     public void recordInfo()
     {
-        underTest.recordInfo( "info", "some info to be recorded" );
+        underTest.recordInfo( "info", testInfo.getMethodName() );
         underTest.save();
-        assertThat( new File( indexRoot, "index.xml" ), contains( "some info to be recorded" ) );
+        assertThat( new File( indexRoot, "index.xml" ), contains( testInfo.getMethodName() ) );
+    }
+
+    /**
+     * Verifies that last information is recorded for a key.
+     */
+    @Test
+    public void recordOnlyLastInfo()
+    {
+        underTest.recordInfo( "info", "Initial "+ testInfo.getMethodName());
+        underTest.recordInfo( "info", "Updated " + testInfo.getMethodName() );
+        underTest.save();
+        assertThat( new File( indexRoot, "index.xml" ), contains( "Updated "+ testInfo.getMethodName() ) );
+        assertThat( new File( indexRoot, "index.xml" ), doesNotContain( "Initial "+ testInfo.getMethodName() ) );
     }
 
     /**
@@ -123,7 +140,7 @@ public class TestIndexRuleTest
         final File to = new File( "a/b/c/d" );
 
         final String relativePath = TestIndexRule.calculateRelativePath( from, to );
-        assertThat( relativePath,is( equalTo( "d" ) ) );
+        assertThat( relativePath, is( equalTo( "d" ) ) );
     }
 
     /**
@@ -137,7 +154,7 @@ public class TestIndexRuleTest
         final File to = new File( "a/b/c" );
 
         final String relativePath = TestIndexRule.calculateRelativePath( from, to );
-        assertThat( relativePath,is( equalTo( ".." ) ) );
+        assertThat( relativePath, is( equalTo( ".." ) ) );
     }
 
     /**
@@ -151,7 +168,7 @@ public class TestIndexRuleTest
         final File to = new File( "a/b/e/f" );
 
         final String relativePath = TestIndexRule.calculateRelativePath( from, to );
-        assertThat( relativePath,is( equalTo( "../../e/f" ) ) );
+        assertThat( relativePath, is( equalTo( "../../e/f" ) ) );
     }
 
 }

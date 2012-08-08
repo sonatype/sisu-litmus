@@ -12,6 +12,7 @@
  */
 package org.sonatype.sisu.litmus.testsupport.junit;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Boolean.TRUE;
 import static javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT;
@@ -23,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Iterator;
+import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -207,15 +210,13 @@ public class TestIndexRule
     @Override
     public void recordInfo( final String key, final String value )
     {
-        initialize();
-        test.withTestInfos( new TestInfoXO().withLink( false ).withKey( key ).withValue( value ) );
+        recordInfo( key, value, false );
     }
 
     @Override
     public void recordLink( final String key, final String value )
     {
-        initialize();
-        test.withTestInfos( new TestInfoXO().withLink( true ).withKey( key ).withValue( value ) );
+        recordInfo( key, value, true );
     }
 
     @Override
@@ -231,6 +232,44 @@ public class TestIndexRule
             catch ( IOException e )
             {
                 throw Throwables.propagate( e );
+            }
+        }
+    }
+
+    /**
+     * Records information about current running test.
+     *
+     * @param key   information key
+     * @param value information value
+     * @param link  if value is a link
+     */
+    private void recordInfo( final String key, final String value, final boolean link )
+    {
+        checkNotNull( key );
+        checkNotNull( value );
+        initialize();
+        removeInfoWithKey( key );
+        test.withTestInfos( new TestInfoXO().withLink( false ).withKey( key ).withValue( value ).withLink( link ) );
+    }
+
+    /**
+     * Removes info for specified key, if exists.
+     *
+     * @param key of info to be removed
+     */
+    private void removeInfoWithKey( final String key )
+    {
+        final List<TestInfoXO> testInfos = test.getTestInfos();
+        if ( testInfos != null && testInfos.size() > 0 )
+        {
+            final Iterator<TestInfoXO> it = testInfos.iterator();
+            while ( it.hasNext() )
+            {
+                final TestInfoXO testInfo = it.next();
+                if ( key.equals( testInfo.getKey() ) )
+                {
+                    it.remove();
+                }
             }
         }
     }
