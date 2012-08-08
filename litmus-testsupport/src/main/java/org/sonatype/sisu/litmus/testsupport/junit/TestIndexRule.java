@@ -398,8 +398,8 @@ public class TestIndexRule
         {
             throw new IOException( "File '" + from.getAbsolutePath() + "' cannot be a root directory" );
         }
-        final String fromPath = from.getCanonicalPath();
-        final String toPath = to.getCanonicalPath();
+        final String fromPath = from.getCanonicalPath().replace( '\\', '/' );
+        final String toPath = to.getCanonicalPath().replace( '\\', '/' );
         if ( toPath.equals( fromPath ) )
         {
             return "";
@@ -409,7 +409,7 @@ public class TestIndexRule
             return toPath.substring( fromPath.length() + 1 );
         }
         final String relativePath = calculateRelativePath( parent, to );
-        return ( ".." + ( relativePath.trim().isEmpty() ? "" : File.separator + relativePath ) );
+        return ( ".." + ( relativePath.trim().isEmpty() ? "" : "/" + relativePath ) );
     }
 
 }
