@@ -137,7 +137,7 @@ public class TestDataRule
      */
     private File testMethodSourceDirectory( String path )
     {
-        return file( dataDir, asPath( description.getTestClass() ), description.getMethodName(), path );
+        return file( dataDir, asPath( description.getTestClass() ), mn( description.getMethodName() ), path );
     }
 
     /**
@@ -147,7 +147,8 @@ public class TestDataRule
      * @return path to class
      * @since 1.0
      */
-    private static String asPath( final Class<?> clazz )
+    //@TestAccessible
+    static String asPath( final Class<?> clazz )
     {
         return asPath( clazz.getPackage() ) + "/" + clazz.getSimpleName();
     }
@@ -178,6 +179,21 @@ public class TestDataRule
             file = new File( file, path );
         }
         return file;
+    }
+
+    /**
+     * Drops index part from name in case of a parametrized test.
+     *
+     * @param methodName method name
+     * @return index-less method name
+     */
+    private String mn( final String methodName )
+    {
+        if ( methodName.contains( "[" ) )
+        {
+            return methodName.substring( 0, methodName.indexOf( "[" ) );
+        }
+        return methodName;
     }
 
 }

@@ -79,7 +79,7 @@ public class TestDataRuleTest
     {
         File file = underTest.resolveFile( "from-class" );
         assertThat( file, is( equalTo( util.resolveFile(
-            "src/test/uncopied-resources/org/sonatype/sisu/litmus/testsupport/junit/TestDataRuleTest/from-class"
+            "src/test/uncopied-resources/" + TestDataRule.asPath( getClass() ) + "/from-class"
         ) ) ) );
     }
 
@@ -95,7 +95,7 @@ public class TestDataRuleTest
     {
         File file = underTest.resolveFile( "from-method" );
         assertThat( file, is( equalTo( util.resolveFile(
-            "src/test/uncopied-resources/org/sonatype/sisu/litmus/testsupport/junit/TestDataRuleTest/resolveFromMethod/from-method"
+            "src/test/uncopied-resources/" + TestDataRule.asPath( getClass() ) + "/resolveFromMethod/from-method"
         ) ) ) );
     }
 
