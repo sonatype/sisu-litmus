@@ -25,7 +25,7 @@ import org.sonatype.sisu.litmus.testsupport.TestSupport;
 import org.sonatype.sisu.litmus.testsupport.junit.TestInfoRule;
 
 /**
- * {@link org.sonatype.nexus.testsuite.support.hamcrest.NexusMatchers} UTs.
+ * {@link LogFileMatcher} UTs.
  *
  * @since 2.2
  */
@@ -39,9 +39,11 @@ public class LogFileMatcherTest
     @Rule
     public TestInfoRule testInfo = new TestInfoRule();
 
+    /**
+     * Verify that log file to be matched does not exist an {@link AssertionError} is thrown with a proper message.
+     */
     @Test
     public void inexistentLogFile()
-        throws Exception
     {
         thrown.expect( AssertionError.class );
         thrown.expectMessage( "java.io.FileNotFoundException: File 'foo.log' does not exist" );
@@ -51,9 +53,11 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verify that a log file that contains an NullPointerException matches.
+     */
     @Test
     public void logFileHasNPE()
-        throws Exception
     {
         assertThat(
             resolveLogFile(),
@@ -61,6 +65,9 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verify that a log file that contains an NullPointerException  and ClassNotFoundException matches.
+     */
     @Test
     public void logFileHasNPEAndCNF()
         throws Exception
@@ -74,9 +81,11 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verifies that a log file that does not have NullPointerException but has ClassNotFoundException matches.
+     */
     @Test
     public void logFileHasNoNPE()
-        throws Exception
     {
         assertThat(
             resolveLogFile(),
@@ -84,6 +93,9 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verifies that a log file that a text "foo" matches.
+     */
     @Test
     public void logFileHasText()
         throws Exception
@@ -94,6 +106,9 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verifies that a log file that does not have a text "foo" matches.
+     */
     @Test
     public void logFileDoesNotHaveText()
         throws Exception
@@ -104,6 +119,9 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verifies that a log file that has a text "foo-ing" matches pattern "".*foo-ing.*".
+     */
     @Test
     public void logFileHasMatchingText()
         throws Exception
@@ -114,6 +132,9 @@ public class LogFileMatcherTest
         );
     }
 
+    /**
+     * Verifies that a log file that does not have a text "foo-ing" is not matching pattern "".*foo-ing.*".
+     */
     @Test
     public void logFileDoesNotMatchText()
         throws Exception

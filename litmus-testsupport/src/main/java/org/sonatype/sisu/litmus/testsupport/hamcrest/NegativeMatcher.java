@@ -16,14 +16,20 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
 /**
- * TODO
+ * A matcher that is able to describe itself when inverted.
  *
- * @since 1.0
+ * @since 1.4
  */
 public interface NegativeMatcher<T>
     extends Matcher<T>
 {
 
+    /**
+     * Generates a description of the object in case that matcher is inverted (negated). The description may be part of
+     * a description of a larger object of which this is just a component, so it should be worded appropriately.
+     *
+     * @param description to be built or appended to
+     */
     void describeNegationTo( final Description description );
 
 }

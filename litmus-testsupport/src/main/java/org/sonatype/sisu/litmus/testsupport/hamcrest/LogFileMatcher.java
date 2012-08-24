@@ -12,6 +12,8 @@
  */
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -21,40 +23,55 @@ import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
-import com.google.common.base.Preconditions;
 
 /**
- * TODO
+ * Log file matcher. Will read every line of a log file and will verify that at least one line is matching. Matching is
+ * specific to subclasses.
  *
- * @since 1.0
+ * @since 1.4
  */
 public abstract class LogFileMatcher
     extends TypeSafeMatcher<File>
     implements NegativeMatcher<File>
 {
 
+    /**
+     * Log file.
+     * Can be null if {@link #matchesSafely(java.io.File)} was not yet called.
+     */
     private File logFile;
 
-    private int failingLineNumber;
+    /**
+     * Line number of log file that matches.
+     */
+    private int matchingLineNumber;
 
-    private String failingLine;
+    /**
+     * Line that matched.
+     */
+    private String matchingLine;
 
+    /**
+     * Verifies that at least one line of log file is matching.
+     *
+     * @param logFile to be matched. Cannot be null.
+     * @return true if at least one line are matching, false otherwise
+     */
     @Override
     protected final boolean matchesSafely( final File logFile )
     {
-        Preconditions.checkNotNull( logFile );
-        this.logFile = logFile;
+        this.logFile = checkNotNull( logFile );
         try
         {
             @SuppressWarnings( "unchecked" )
             final List<String> lines = (List<String>) FileUtils.readLines( logFile, "UTF-8" );
             if ( lines != null && lines.size() > 0 )
             {
-                failingLineNumber = 0;
+                matchingLineNumber = 0;
                 for ( final String line : lines )
                 {
-                    failingLineNumber++;
-                    failingLine = line;
+                    matchingLineNumber++;
+                    matchingLine = line;
                     if ( matchesLine( line ) )
                     {
                         return true;
@@ -66,8 +83,8 @@ public abstract class LogFileMatcher
         {
             throw new AssertionError( e );
         }
-        failingLineNumber = 0;
-        failingLine = null;
+        matchingLineNumber = 0;
+        matchingLine = null;
         return false;
     }
 
@@ -99,13 +116,13 @@ public abstract class LogFileMatcher
     @Override
     protected final void describeMismatchSafely( final File logFile, final Description mismatchDescription )
     {
-        if ( failingLine != null )
+        if ( matchingLine != null )
         {
             mismatchDescription
                 .appendText( "contained on line " )
-                .appendValue( failingLineNumber )
+                .appendValue( matchingLineNumber )
                 .appendText( ": " )
-                .appendValue( failingLine );
+                .appendValue( matchingLine );
         }
         else
         {
@@ -114,15 +131,41 @@ public abstract class LogFileMatcher
         }
     }
 
+    /**
+     * Subclasses should implement this.
+     * Called on each line of log file to be matched.
+     *
+     * @param line to be matched. Never null.
+     * @return true if log line matches, false otherwise
+     */
     protected abstract boolean matchesLine( final String line );
 
+    /**
+     * Subclasses should implement this and should describe what they are matching.
+     *
+     * @param logFile     that was matched. Never null.
+     * @param description to append to
+     */
     protected abstract void describeTo( final File logFile, final Description description );
 
+    /**
+     * Subclasses should implement this and should describe the mismatch.
+     *
+     * @param logFile             that was matched. Never null.
+     * @param mismatchDescription to append to
+     */
     protected abstract void describeMismatchTo( final File logFile, final Description mismatchDescription );
 
+    /**
+     * At least one line of log file should contain the FQN of specified exception class.
+     *
+     * @param exception to be found in log file. Cannot be null.
+     * @return matcher. Never null.
+     */
     @Factory
     public static LogFileMatcher hasExceptionOfType( final Class<? extends Exception> exception )
     {
+        checkNotNull( exception );
         return new LogFileMatcher()
         {
             @Override
@@ -146,9 +189,16 @@ public abstract class LogFileMatcher
         };
     }
 
+    /**
+     * At least one line of log file should contain specified text.
+     *
+     * @param text to be found in log file. Cannot be null.
+     * @return matcher
+     */
     @Factory
     public static LogFileMatcher hasText( final String text )
     {
+        checkNotNull( text );
         return new LogFileMatcher()
         {
             @Override
@@ -172,6 +222,12 @@ public abstract class LogFileMatcher
         };
     }
 
+    /**
+     * At least one line of log file should match specified pattern.
+     *
+     * @param pattern to be found in log file. Cannot be null.
+     * @return matcher
+     */
     @Factory
     public static LogFileMatcher hasText( final Pattern pattern )
     {
