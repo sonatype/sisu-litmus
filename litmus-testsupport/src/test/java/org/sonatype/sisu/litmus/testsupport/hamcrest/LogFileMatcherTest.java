@@ -57,7 +57,7 @@ public class LogFileMatcherTest
      * Verify that a log file that contains an NullPointerException matches.
      */
     @Test
-    public void logFileHasNPE()
+    public void hasNPE()
     {
         assertThat(
             resolveLogFile(),
@@ -69,7 +69,7 @@ public class LogFileMatcherTest
      * Verify that a log file that contains an NullPointerException  and ClassNotFoundException matches.
      */
     @Test
-    public void logFileHasNPEAndCNF()
+    public void hasNPEAndCNF()
         throws Exception
     {
         assertThat(
@@ -85,7 +85,7 @@ public class LogFileMatcherTest
      * Verifies that a log file that does not have NullPointerException but has ClassNotFoundException matches.
      */
     @Test
-    public void logFileHasNoNPE()
+    public void hasNoNPE()
     {
         assertThat(
             resolveLogFile(),
@@ -97,7 +97,7 @@ public class LogFileMatcherTest
      * Verifies that a log file that a text "foo" matches.
      */
     @Test
-    public void logFileHasText()
+    public void hasText()
         throws Exception
     {
         assertThat(
@@ -110,7 +110,7 @@ public class LogFileMatcherTest
      * Verifies that a log file that does not have a text "foo" matches.
      */
     @Test
-    public void logFileDoesNotHaveText()
+    public void doesNotHaveText()
         throws Exception
     {
         assertThat(
@@ -123,7 +123,7 @@ public class LogFileMatcherTest
      * Verifies that a log file that has a text "foo-ing" matches pattern "".*foo-ing.*".
      */
     @Test
-    public void logFileHasMatchingText()
+    public void hasMatchingText()
         throws Exception
     {
         assertThat(
@@ -136,7 +136,7 @@ public class LogFileMatcherTest
      * Verifies that a log file that does not have a text "foo-ing" is not matching pattern "".*foo-ing.*".
      */
     @Test
-    public void logFileDoesNotMatchText()
+    public void doesNotMatchText()
         throws Exception
     {
         assertThat(
