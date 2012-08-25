@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -46,7 +47,10 @@ public class LogFileMatcherTest
     public void inexistentLogFile()
     {
         thrown.expect( AssertionError.class );
-        thrown.expectMessage( "java.io.FileNotFoundException: File 'foo.log' does not exist" );
+        thrown.expectMessage( Matchers.<String>allOf(
+            containsString( "java.io.FileNotFoundException" ),
+            containsString( "foo.log" )
+        ) );
         assertThat(
             new File( "foo.log" ),
             LogFileMatcher.hasExceptionOfType( NullPointerException.class )

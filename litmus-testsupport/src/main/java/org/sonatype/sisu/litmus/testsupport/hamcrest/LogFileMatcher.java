@@ -16,10 +16,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.TypeSafeMatcher;
@@ -61,27 +60,31 @@ public abstract class LogFileMatcher
     protected final boolean matchesSafely( final File logFile )
     {
         this.logFile = checkNotNull( logFile );
+        Scanner scanner = null;
         try
         {
-            @SuppressWarnings( "unchecked" )
-            final List<String> lines = (List<String>) FileUtils.readLines( logFile, "UTF-8" );
-            if ( lines != null && lines.size() > 0 )
+            scanner = new Scanner( logFile, "UTF-8" );
+            matchingLineNumber = 0;
+            while ( scanner.hasNextLine() )
             {
-                matchingLineNumber = 0;
-                for ( final String line : lines )
+                matchingLineNumber++;
+                matchingLine = scanner.nextLine();
+                if ( matchesLine( matchingLine ) )
                 {
-                    matchingLineNumber++;
-                    matchingLine = line;
-                    if ( matchesLine( line ) )
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
         }
         catch ( IOException e )
         {
             throw new AssertionError( e );
+        }
+        finally
+        {
+            if ( scanner != null )
+            {
+                scanner.close();
+            }
         }
         matchingLineNumber = 0;
         matchingLine = null;
