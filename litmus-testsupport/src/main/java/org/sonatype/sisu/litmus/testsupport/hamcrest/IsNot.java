@@ -21,7 +21,9 @@ import org.hamcrest.Matcher;
  * Replacement for {@link org.hamcrest.core.IsNot} that delegates mismatch description to wrapped Matcher if set.
  *
  * @since 1.0
+ * @deprecated Use {@link InversionMatcher} instead (which can better describe the negation)
  */
+@Deprecated
 public class IsNot<T> extends BaseMatcher<T> {
 
         private final Matcher<T> matcher;
@@ -52,8 +54,10 @@ public class IsNot<T> extends BaseMatcher<T> {
 
         /**
          * Inverts the rule.
+         * @deprecated Use {@link InversionMatcher} instead (which can better describe the negation)
          */
         @Factory
+        @Deprecated
         public static <T> Matcher<T> not(Matcher<T> matcher) {
             return new IsNot(matcher);
         }
@@ -63,8 +67,11 @@ public class IsNot<T> extends BaseMatcher<T> {
          *
          * For example:  assertThat(cheese, is(not(equalTo(smelly))))
          *          vs.  assertThat(cheese, is(not(smelly)))
+         *
+         * @deprecated Use {@link InversionMatcher} instead (which can better describe the negation)
          */
         @Factory
+        @Deprecated
         public static <T> Matcher<T> not(T value) {
             return not(org.hamcrest.Matchers.equalTo(value));
         }
