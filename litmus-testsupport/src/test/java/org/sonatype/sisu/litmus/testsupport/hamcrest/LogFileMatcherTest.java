@@ -28,7 +28,7 @@ import org.sonatype.sisu.litmus.testsupport.junit.TestInfoRule;
 /**
  * {@link LogFileMatcher} UTs.
  *
- * @since 2.2
+ * @since 1.4
  */
 public class LogFileMatcherTest
     extends TestSupport
