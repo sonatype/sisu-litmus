@@ -71,7 +71,7 @@
                             <xsl:attribute name="href">
                               <xsl:value-of select="value"/>
                             </xsl:attribute>
-                            <xsl:value-of select="value"/>
+                            View
                           </a>
                         </td>
                       </xsl:if>
