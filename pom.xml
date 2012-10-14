@@ -13,7 +13,8 @@
     See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -26,7 +27,7 @@
     <artifactId>litmus</artifactId>
     <name>Litmus</name>
     <packaging>pom</packaging>
-    <version>1.4.2-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
 
     <url>https://github.com/sonatype/sisu-litmus</url>
 
@@ -64,7 +65,7 @@
 
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
-        <build.number />
+        <build.number/>
 
         <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
@@ -76,13 +77,19 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.6.4</version>
+                <version>1.7.2</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.0.7</version>
             </dependency>
 
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.0.1</version>
+                <version>1.0.7</version>
             </dependency>
 
             <dependency>
@@ -106,24 +113,24 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>10.0.1</version>
+                <version>11.0.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.sonatype.sisu</groupId>
                 <artifactId>sisu-inject-bean</artifactId>
-                <version>2.3.0</version>
+                <version>2.3.1</version>
             </dependency>
 
             <dependency>
                 <groupId>org.sonatype.sisu</groupId>
                 <artifactId>sisu-guice</artifactId>
-                <version>3.1.1</version>
+                <version>3.1.2</version>
                 <exclusions>
-                  <exclusion>
-                    <groupId>org.sonatype.sisu</groupId>
-                    <artifactId>sisu-guava</artifactId>
-                  </exclusion>
+                    <exclusion>
+                        <groupId>org.sonatype.sisu</groupId>
+                        <artifactId>sisu-guava</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -198,16 +205,16 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            
+
             <!-- mockito-core and powermock-reflect depend on different versions of objenesis, force newest -->
             <dependency>
                 <groupId>org.objenesis</groupId>
                 <artifactId>objenesis</artifactId>
                 <version>1.2</version>
             </dependency>
-            
-           <!-- we need to followup and see if we can push this to central to allowing easier consumption of litmus outside sonatype -->
-           <!-- http://code.google.com/p/junit-ext/issues/detail?id=4 -->
+
+            <!-- we need to followup and see if we can push this to central to allowing easier consumption of litmus outside sonatype -->
+            <!-- http://code.google.com/p/junit-ext/issues/detail?id=4 -->
             <dependency>
                 <groupId>com.googlecode.junit-ext</groupId>
                 <artifactId>junit-ext</artifactId>
@@ -216,17 +223,16 @@
             </dependency>
 
             <dependency>
-              <groupId>commons-io</groupId>
-              <artifactId>commons-io</artifactId>
-              <version>1.4</version>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>1.4</version>
             </dependency>
 
             <dependency>
-              <groupId>org.sonatype.sisu.goodies</groupId>
-              <artifactId>goodies-common</artifactId>
-              <version>1.4</version>
+                <groupId>org.sonatype.sisu.goodies</groupId>
+                <artifactId>goodies-common</artifactId>
+                <version>1.4</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -436,7 +442,7 @@
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
-                                                <ignore />
+                                                <ignore/>
                                             </action>
                                         </pluginExecution>
                                     </pluginExecutions>
