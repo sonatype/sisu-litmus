@@ -14,7 +14,6 @@ package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.sonatype.sisu.goodies.common.Preconditions.checkNotNullElements;
 
 import java.util.Arrays;
 
@@ -75,7 +74,11 @@ public class ConjunctionMatcher<T>
     {
         checkNotNull( matchers, "matchers" );
         checkArgument( matchers.iterator().hasNext(), "At least one matcher" );
-        checkNotNullElements( matchers, "matchers (element at position '%s')" );
+        int i=0;
+        for (Matcher<? super T> matcher : matchers) {
+            checkNotNull(matcher, "Matcher element [%s] is null", i);
+            i++;
+        }
 
         this.alternativeDescription = alternativeDescription;
         this.matchers = Lists.newArrayList( checkNotNull( matchers, "matchers" ) );

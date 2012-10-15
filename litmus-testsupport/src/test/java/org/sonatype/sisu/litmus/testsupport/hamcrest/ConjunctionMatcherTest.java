@@ -49,7 +49,7 @@ public class ConjunctionMatcherTest
     public void nullMatcherElement()
     {
         thrown.expect( NullPointerException.class );
-        thrown.expectMessage( "matchers (element at position '0')" );
+        thrown.expectMessage( "Matcher element [0] is null" );
         assertThat(
             "some string",
             ConjunctionMatcher.allOf( (Matcher<String>) null )
@@ -77,7 +77,7 @@ public class ConjunctionMatcherTest
     public void nullMatcherElementInCollection()
     {
         thrown.expect( NullPointerException.class );
-        thrown.expectMessage( "matchers (element at position '0')" );
+        thrown.expectMessage( "Matcher element [0] is null" );
 
         final Collection<Matcher<? super String>> matchers = Lists.newArrayList();
         matchers.add( null );

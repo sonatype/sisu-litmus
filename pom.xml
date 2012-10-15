@@ -227,12 +227,6 @@
                 <artifactId>commons-io</artifactId>
                 <version>2.4</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.sonatype.sisu.goodies</groupId>
-                <artifactId>goodies-common</artifactId>
-                <version>1.4</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -324,6 +318,13 @@
                                         <exclude>org.mockito:mockito-all</exclude>
                                     </excludes>
                                     <message>mockito-all includes third party classes within it - depend on mockito-core instead</message>
+                                </bannedDependencies>
+                                <bannedDependencies>
+                                    <searchTransitive>true</searchTransitive>
+                                    <excludes>
+                                        <exclude>org.sonatype.sisu.goodies:*</exclude>
+                                    </excludes>
+                                    <message>Goodies depends on litmus, and thus litmus must not depend on Goodies.</message>
                                 </bannedDependencies>
                             </rules>
                         </configuration>
