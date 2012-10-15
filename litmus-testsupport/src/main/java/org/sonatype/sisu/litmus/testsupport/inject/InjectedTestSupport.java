@@ -96,6 +96,7 @@ public class InjectedTestSupport
         loadAll( properties, "injected-test.properties" );
         // per test class properties
         load( properties, this.getClass().getSimpleName() + "/injected-test.properties" );
+        properties.putAll( System.getProperties() );
         super.configure( properties );
         properties.setProperty( "basedir", util.getBaseDir().getAbsolutePath() );
     }
@@ -134,7 +135,6 @@ public class InjectedTestSupport
                 {
                     properties.load( in );
                 }
-                properties.putAll( System.getProperties() );
             }
             catch ( final IOException e )
             {
