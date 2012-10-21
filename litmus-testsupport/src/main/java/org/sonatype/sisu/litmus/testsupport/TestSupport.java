@@ -40,12 +40,6 @@ public class TestSupport
     @Rule
     public final TestTracer tracer = new TestTracer( this );
 
-    /**
-     * Test method utilities.
-     */
-    @Rule
-    public final TestMethod testMethod = new TestMethod( util );
-
     @Before
     public void initMocks()
     {
