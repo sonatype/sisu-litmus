@@ -10,10 +10,13 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
-package org.sonatype.sisu.litmus.testsupport.category;
+package org.sonatype.sisu.litmus.testsupport.group;
 
 /**
  * Marker interface to categorize a test as arbitrarily slow running.
+ * <p />
+ * Slow running unit tests could be a sign of code smell as they are probably testing too much, do not use mocked fixtures
+ * or generally are poorly designed.
  *
  * @since 1.5
  */
