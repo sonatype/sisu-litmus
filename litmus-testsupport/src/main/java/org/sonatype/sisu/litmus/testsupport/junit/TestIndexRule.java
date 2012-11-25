@@ -102,6 +102,7 @@ public class TestIndexRule
 
     /**
      * The root directory that contains the the index and eventual linked & copied files.
+     * The root directory that contains the the index and eventual linked & copied files.
      * Never null.
      */
     private final File indexDir;
@@ -167,10 +168,10 @@ public class TestIndexRule
     /**
      * Constructor.
      *
-     * @param dataDir  root directory that contains the test specific directories (cannot be null)
      * @param indexDir root directory that contains the index (cannot be null)
+     * @param dataDir  root directory that contains the test specific directories (cannot be null)
      */
-    public TestIndexRule( final File dataDir, final File indexDir )
+    public TestIndexRule( final File indexDir, final File dataDir )
     {
         this.dataDir = dataDir;
         this.indexDir = indexDir;
