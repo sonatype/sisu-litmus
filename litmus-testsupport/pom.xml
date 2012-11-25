@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.sonatype.sisu.litmus</groupId>
         <artifactId>litmus</artifactId>
-        <version>1.5</version>
+        <version>1.5.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>litmus-testsupport</artifactId>
