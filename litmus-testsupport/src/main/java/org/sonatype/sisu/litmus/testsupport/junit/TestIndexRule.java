@@ -31,6 +31,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.sonatype.sisu.litmus.testsupport.TestIndex;
@@ -100,10 +101,16 @@ public class TestIndexRule
 {
 
     /**
-     * The root directory that contains the index and test specific directories.
+     * The root directory that contains the the index and eventual linked & copied files.
      * Never null.
      */
     private final File indexDir;
+
+    /**
+     * The root directory that contains test specific directories.
+     * Never null.
+     */
+    private File dataDir;
 
     /**
      * Test description.
@@ -149,10 +156,23 @@ public class TestIndexRule
     /**
      * Constructor.
      *
-     * @param indexDir root directory that contains the index and test specific directories. Cannot be null.
+     * @param indexDir root directory that contains the index and test specific directories (cannot be null)
      */
     public TestIndexRule( final File indexDir )
     {
+        this.indexDir = indexDir;
+        this.dataDir = indexDir;
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param dataDir  root directory that contains the test specific directories (cannot be null)
+     * @param indexDir root directory that contains the index (cannot be null)
+     */
+    public TestIndexRule( final File dataDir, final File indexDir )
+    {
+        this.dataDir = dataDir;
         this.indexDir = indexDir;
     }
 
@@ -238,6 +258,38 @@ public class TestIndexRule
         }
     }
 
+    @Override
+    public void recordAndCopyLink( final String key, final File file )
+    {
+        if ( file.exists() )
+        {
+            final File reportsDir = new File( indexDir, getDirectory().getName() );
+            checkState(
+                ( reportsDir.mkdirs() || reportsDir.exists() ) && reportsDir.isDirectory(),
+                "Not able to create reports directory '{}'",
+                reportsDir.getAbsolutePath()
+            );
+            try
+            {
+                final File copied = new File( reportsDir, file.getName() );
+                if ( copied.exists() )
+                {
+                    checkState(
+                        copied.delete(),
+                        "Not able to delete '{}'",
+                        copied.getAbsolutePath()
+                    );
+                }
+                FileUtils.copyFile( file, copied );
+                recordLink( key, calculateRelativePath( indexDir, copied ) );
+            }
+            catch ( IOException e )
+            {
+                throw Throwables.propagate( e );
+            }
+        }
+    }
+
     /**
      * Records information about current running test.
      *
@@ -278,7 +330,7 @@ public class TestIndexRule
 
     /**
      * Reads the index from ${indexDir}/index.xml and records information about current running test.
-     * It will also create the test specific directory under ${indexDir}.
+     * It will also create the test specific directory under ${dataDir}.
      */
     private void initialize()
     {
@@ -299,7 +351,7 @@ public class TestIndexRule
             save();
             copyStyleSheets();
 
-            testDir = new File( indexDir, String.valueOf( index.getCounter() ) );
+            testDir = new File( dataDir, String.valueOf( index.getCounter() ) );
             checkState(
                 ( testDir.mkdirs() || testDir.exists() ) && testDir.isDirectory(),
                 "Not able to create test directory '{}'",

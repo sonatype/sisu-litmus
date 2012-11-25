@@ -61,9 +61,19 @@ public interface TestIndex
      * The value is considered to be a link to a file and value will be stored as relative to index root dir.
      * No link is recorded if file does not exist.
      *
-     * @param key  information key
-     * @param file information value
+     * @param key  information key (cannot be null)
+     * @param file linked file (cannot be null)
      */
     void recordLink( String key, File file );
+
+    /**
+     * Copies and records information about current running test.
+     * The value is considered to be a link to a file and value will be stored as relative to index root dir.
+     * No link is recorded if file does not exist.
+     *
+     * @param key  information key
+     * @param file linked file
+     */
+    void recordAndCopyLink( String key, File file );
 
 }
