@@ -224,7 +224,7 @@ public class TestIndexRule
         final File dir = new File( getDirectory(), name );
         checkState(
             ( dir.mkdirs() || dir.exists() ) && dir.isDirectory(),
-            "Not able to create test directory '{}'",
+            "Not able to create test directory '%s'",
             dir.getAbsolutePath()
         );
         return dir;
@@ -267,7 +267,7 @@ public class TestIndexRule
             final File reportsDir = new File( indexDir, getDirectory().getName() );
             checkState(
                 ( reportsDir.mkdirs() || reportsDir.exists() ) && reportsDir.isDirectory(),
-                "Not able to create reports directory '{}'",
+                "Not able to create reports directory '%s'",
                 reportsDir.getAbsolutePath()
             );
             try
@@ -277,7 +277,7 @@ public class TestIndexRule
                 {
                     checkState(
                         copied.delete(),
-                        "Not able to delete '{}'",
+                        "Not able to delete '%s'",
                         copied.getAbsolutePath()
                     );
                 }
@@ -355,7 +355,7 @@ public class TestIndexRule
             testDir = new File( dataDir, String.valueOf( index.getCounter() ) );
             checkState(
                 ( testDir.mkdirs() || testDir.exists() ) && testDir.isDirectory(),
-                "Not able to create test directory '{}'",
+                "Not able to create test directory '%s'",
                 testDir.getAbsolutePath()
             );
 
