@@ -17,13 +17,12 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Boolean.TRUE;
 import static javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT;
 import static javax.xml.bind.Marshaller.JAXB_FRAGMENT;
-import static org.apache.commons.io.FileUtils.copyURLToFile;
-import static org.apache.commons.io.FileUtils.writeStringToFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -31,7 +30,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.sonatype.sisu.litmus.testsupport.TestIndex;
@@ -41,6 +39,9 @@ import org.sonatype.sisu.litmus.testsupport.junit.index.TestXO;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
 
 /**
  * JUnit rule for creating/accessing directories/files unique to a test method/run. The rule will create a mapping file
@@ -273,15 +274,7 @@ public class TestIndexRule
             try
             {
                 final File copied = new File( reportsDir, file.getName() );
-                if ( copied.exists() )
-                {
-                    checkState(
-                        copied.delete(),
-                        "Not able to delete '%s'",
-                        copied.getAbsolutePath()
-                    );
-                }
-                FileUtils.copyFile( file, copied );
+                Files.copy( file, copied );
                 recordLink( key, calculateRelativePath( indexDir, copied ) );
             }
             catch ( IOException e )
@@ -370,12 +363,12 @@ public class TestIndexRule
     {
         try
         {
-            copyURLToFile(
-                getClass().getClassLoader().getResource( "index.css" ),
+            Files.copy(
+                Resources.newInputStreamSupplier( Resources.getResource( "index.css" ) ),
                 new File( indexDir, "index.css" )
             );
-            copyURLToFile(
-                getClass().getClassLoader().getResource( "index.xsl" ),
+            Files.copy(
+                Resources.newInputStreamSupplier( Resources.getResource( "index.xsl" ) ),
                 new File( indexDir, "index.xsl" )
             );
         }
@@ -427,7 +420,8 @@ public class TestIndexRule
             marshaller.setProperty( JAXB_FRAGMENT, TRUE );
             marshaller.marshal( index, writer );
 
-            writeStringToFile( indexXml, writer.toString() );
+            Files.createParentDirs( indexXml );
+            Files.copy( CharStreams.newReaderSupplier( writer.toString() ), indexXml, Charset.forName( "UTF-8" ) );
         }
         catch ( Exception e )
         {

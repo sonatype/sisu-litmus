@@ -21,7 +21,13 @@ import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.exists;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.isDirectory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,13 +42,17 @@ public class TestIndexRuleTest
     extends TestSupport
 {
 
-    private File indexRoot = util.resolveFile( "target/test-index-rule" );
+    public static final boolean THREAD_IS_NOT_INTERRUPTED = true;
+
+    private File indexRoot = util.resolveFile( "target/test-index-rule-index" );
+
+    private File dataRoot = util.resolveFile( "target/test-index-rule-data" );
 
     @Rule
     public TestInfoRule testInfo = new TestInfoRule();
 
     @Rule
-    public TestIndexRule underTest = new TestIndexRule( indexRoot );
+    public TestIndexRule underTest = new TestIndexRule( indexRoot, dataRoot );
 
     /**
      * Verifies that a root directory is created.
@@ -98,11 +108,11 @@ public class TestIndexRuleTest
     @Test
     public void recordOnlyLastInfo()
     {
-        underTest.recordInfo( "info", "Initial "+ testInfo.getMethodName());
+        underTest.recordInfo( "info", "Initial " + testInfo.getMethodName() );
         underTest.recordInfo( "info", "Updated " + testInfo.getMethodName() );
         underTest.save();
-        assertThat( new File( indexRoot, "index.xml" ), contains( "Updated "+ testInfo.getMethodName() ) );
-        assertThat( new File( indexRoot, "index.xml" ), doesNotContain( "Initial "+ testInfo.getMethodName() ) );
+        assertThat( new File( indexRoot, "index.xml" ), contains( "Updated " + testInfo.getMethodName() ) );
+        assertThat( new File( indexRoot, "index.xml" ), doesNotContain( "Initial " + testInfo.getMethodName() ) );
     }
 
     /**
@@ -169,6 +179,63 @@ public class TestIndexRuleTest
 
         final String relativePath = TestIndexRule.calculateRelativePath( from, to );
         assertThat( relativePath, is( equalTo( "../../e/f" ) ) );
+    }
+
+    @Test
+    public void recordAndCopyLinkWhileWriting()
+        throws IOException, InterruptedException
+    {
+        final AtomicReference<Exception> failure = new AtomicReference<Exception>();
+        final File outFile = new File( underTest.getDirectory(), "write.txt" );
+        final Thread writerThread = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    final PrintWriter out = new PrintWriter( new FileOutputStream( outFile ) );
+                    while ( THREAD_IS_NOT_INTERRUPTED )
+                    {
+                        out.println( new Date() );
+                        out.flush();
+                    }
+                }
+                catch ( final FileNotFoundException e )
+                {
+                    failure.set( e );
+                }
+            }
+        };
+        final Thread copyThread = new Thread()
+        {
+            @Override
+            public void run()
+            {
+                final Random randomGenerator = new Random();
+                final long start = System.currentTimeMillis();
+                try
+                {
+                    while ( System.currentTimeMillis() - start < 10000 )
+                    {
+                        underTest.recordAndCopyLink( "test", outFile );
+                        sleep( randomGenerator.nextInt( 300 ) );
+                    }
+                }
+                catch ( final Exception e )
+                {
+                    failure.set( e );
+                }
+            }
+        };
+        writerThread.start();
+        copyThread.start();
+        copyThread.join();
+        writerThread.interrupt();
+        if ( failure.get() != null )
+        {
+            assertThat( "Copy failed: " + failure.get(), false );
+        }
     }
 
 }
