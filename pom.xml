@@ -26,7 +26,7 @@
     <artifactId>litmus</artifactId>
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.5.1</version>
 
     <url>https://github.com/sonatype/sisu-litmus</url>
 
