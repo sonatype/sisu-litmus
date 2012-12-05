@@ -265,6 +265,7 @@ public class TestIndexRule
     {
         if ( file.exists() )
         {
+            initialize();
             final File reportsDir = new File( indexDir, getDirectory().getName() );
             checkState(
                 ( reportsDir.mkdirs() || reportsDir.exists() ) && reportsDir.isDirectory(),
@@ -273,7 +274,31 @@ public class TestIndexRule
             );
             try
             {
-                final File copied = new File( reportsDir, file.getName() );
+                File copied;
+                if ( file.getAbsolutePath().startsWith( dataDir.getAbsolutePath() ) )
+                {
+                    copied = new File( reportsDir, calculateRelativePath( getDirectory(), file ) );
+                }
+                else
+                {
+                    String copiedFileName = file.getName();
+                    String copiedFileExt = "";
+                    final int extPos = file.getName().lastIndexOf( "." );
+                    if ( extPos > 0 && copiedFileName.length() > extPos + 1 )
+                    {
+                        copiedFileName = file.getName().substring( 0, extPos );
+                        copiedFileExt = file.getName().substring( extPos );
+                    }
+                    String copiedFilePath = copiedFileName + "-" + System.currentTimeMillis() + copiedFileExt;
+                    copied = new File( reportsDir, copiedFilePath );
+                }
+
+                final File copiedFileDir = copied.getParentFile();
+                checkState(
+                    ( copiedFileDir.mkdirs() || copiedFileDir.exists() ) && copiedFileDir.isDirectory(),
+                    "Not able to create directory '%s'",
+                    copiedFileDir.getAbsolutePath()
+                );
                 Files.copy( file, copied );
                 recordLink( key, calculateRelativePath( indexDir, copied ) );
             }
