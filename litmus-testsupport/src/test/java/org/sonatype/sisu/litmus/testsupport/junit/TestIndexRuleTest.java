@@ -13,6 +13,7 @@
 package org.sonatype.sisu.litmus.testsupport.junit;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.arrayWithSize;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.contains;
@@ -23,6 +24,7 @@ import static org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers.isDirec
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
@@ -32,6 +34,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Rule;
 import org.junit.Test;
 import org.sonatype.sisu.litmus.testsupport.TestSupport;
+import org.sonatype.sisu.litmus.testsupport.hamcrest.FileMatchers;
+import com.google.common.io.Files;
 
 /**
  * {@link TestIndexRule} UTs.
@@ -179,6 +183,45 @@ public class TestIndexRuleTest
 
         final String relativePath = TestIndexRule.calculateRelativePath( from, to );
         assertThat( relativePath, is( equalTo( "../../e/f" ) ) );
+    }
+
+    /**
+     * Verify if a file with same name is copied twice, and source is not from data dir, an timestamped file is created.
+     */
+    @Test
+    public void recordAndCopyLinkMultipleTimes()
+    {
+        final File fileToCopy = util.resolveFile( "src/test/resources/sized_file.txt" );
+        underTest.recordAndCopyLink( testInfo.getMethodName(), fileToCopy );
+        underTest.recordAndCopyLink( testInfo.getMethodName(), fileToCopy );
+        final File indexTargetDir = new File( indexRoot, underTest.getDirectory().getName() );
+        final String[] files = indexTargetDir.list( new FilenameFilter()
+        {
+            @Override
+            public boolean accept( final File parentDir, final String name )
+            {
+                return name.matches( "sized_file-.*\\.txt" );
+            }
+        } );
+        assertThat( files, arrayWithSize( 2 ) );
+    }
+
+    /**
+     * Verify that copied file is copied under same path structure as source file f source is in data dir.
+     */
+    @Test
+    public void recordAndCopyLinkMultipleTimesFromDataDir()
+        throws IOException
+    {
+        final File source = util.resolveFile( "src/test/resources/sized_file.txt" );
+        final File target = new File( underTest.getDirectory( "foo/bar" ), "foo.txt" );
+
+        Files.copy( source, target );
+
+        underTest.recordAndCopyLink( testInfo.getMethodName(), target );
+
+        final File indexTargetDir = new File( indexRoot, underTest.getDirectory().getName() );
+        assertThat( new File( indexTargetDir, "foo/bar/foo.txt" ), FileMatchers.exists() );
     }
 
     @Test
