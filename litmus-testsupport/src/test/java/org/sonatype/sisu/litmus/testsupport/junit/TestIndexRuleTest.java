@@ -203,6 +203,7 @@ public class TestIndexRuleTest
                 return name.matches( "sized_file-.*\\.txt" );
             }
         } );
+        // NOTE this count may fail on windows VM occasionally if writing files is slow, but should more often pass
         assertThat( files, arrayWithSize( 2 ) );
     }
 
