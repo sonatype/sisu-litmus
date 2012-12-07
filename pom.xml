@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.sonatype.forge</groupId>
         <artifactId>forge-parent</artifactId>
-        <version>19</version>
+        <version>27</version>
     </parent>
 
     <groupId>org.sonatype.sisu.litmus</groupId>
@@ -53,21 +53,15 @@
         <url>https://builds.sonatype.org/job/sisu-litmus</url>
     </ciManagement>
 
-    <!--<issueManagement>-->
-    <!--<system>Jira</system>-->
-    <!--<url>https://issues.sonatype.org/browse/???</url>-->
-    <!--</issueManagement>-->
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/sonatype/sisu-litmus/issues</url>
+    </issueManagement>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <build.number />
-
-        <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
-
         <powermockVersion>1.4.12</powermockVersion>
     </properties>
 
@@ -241,43 +235,6 @@
     </modules>
 
     <build>
-        <defaultGoal>install</defaultGoal>
-
-        <resources>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-
-            <resource>
-                <directory>${project.basedir}/src/main/filtered-resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </resource>
-        </resources>
-
-        <testResources>
-            <testResource>
-                <directory>${project.basedir}/src/test/resources</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </testResource>
-
-            <testResource>
-                <directory>${project.basedir}/src/test/filtered-resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*</include>
-                </includes>
-            </testResource>
-        </testResources>
 
         <plugins>
             <plugin>
@@ -351,20 +308,6 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                        <configuration>
-                            <includePom>true</includePom>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
