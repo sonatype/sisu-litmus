@@ -62,6 +62,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.databene</groupId>
+            <artifactId>contiperf</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
         </dependency>
