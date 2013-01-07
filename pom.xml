@@ -51,7 +51,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <build.number />
-        <powermockVersion>1.4.12</powermockVersion>
+        <powermockVersion>1.5</powermockVersion>
     </properties>
 
     <dependencyManagement>
