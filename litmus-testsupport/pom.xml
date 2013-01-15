@@ -86,8 +86,8 @@
         </dependency>
 
         <dependency>
-          <groupId>org.easytesting</groupId>
-          <artifactId>fest-assert-core</artifactId>
+            <groupId>org.easytesting</groupId>
+            <artifactId>fest-assert-core</artifactId>
         </dependency>
 
         <dependency>
