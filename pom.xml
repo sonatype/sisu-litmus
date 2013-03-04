@@ -25,7 +25,7 @@
     <groupId>org.sonatype.sisu.litmus</groupId>
     <artifactId>litmus</artifactId>
     <packaging>pom</packaging>
-    <version>1.6</version>
+    <version>1.6.1-SNAPSHOT</version>
 
     <url>https://github.com/sonatype/sisu-litmus</url>
     <inceptionYear>2011</inceptionYear>
