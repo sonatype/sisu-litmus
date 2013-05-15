@@ -51,6 +51,7 @@ public class LogFileMatcherTest
             containsString( "java.io.FileNotFoundException" ),
             containsString( "foo.log" )
         ) );
+        thrown.handleAssertionErrors();
         assertThat(
             new File( "foo.log" ),
             LogFileMatcher.hasExceptionOfType( NullPointerException.class )
