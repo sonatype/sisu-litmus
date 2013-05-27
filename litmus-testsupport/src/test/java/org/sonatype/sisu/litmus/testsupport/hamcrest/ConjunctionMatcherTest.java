@@ -40,7 +40,7 @@ public class ConjunctionMatcherTest
 {
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
 
     /**
      * Verify that a null matcher element is not allowed.
@@ -101,7 +101,6 @@ public class ConjunctionMatcherTest
                 Matchers.containsString( "but: first failed" )
             )
         );
-        thrown.handleAssertionErrors();
 
         assertThat(
             "some string",
@@ -125,7 +124,6 @@ public class ConjunctionMatcherTest
                 Matchers.containsString( "but: second failed" )
             )
         );
-        thrown.handleAssertionErrors();
 
         assertThat(
             "some string",
@@ -150,7 +148,6 @@ public class ConjunctionMatcherTest
                 Matchers.containsString( "but: first failed" )
             )
         );
-        thrown.handleAssertionErrors();
 
         assertThat(
             "some string",
@@ -176,7 +173,6 @@ public class ConjunctionMatcherTest
                 Matchers.containsString( "but: second failed" )
             )
         );
-        thrown.handleAssertionErrors();
 
         assertThat(
             "some string",

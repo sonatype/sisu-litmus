@@ -35,7 +35,7 @@ public class LogFileMatcherTest
 {
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
 
     @Rule
     public TestInfoRule testInfo = new TestInfoRule();
@@ -51,7 +51,6 @@ public class LogFileMatcherTest
             containsString( "java.io.FileNotFoundException" ),
             containsString( "foo.log" )
         ) );
-        thrown.handleAssertionErrors();
         assertThat(
             new File( "foo.log" ),
             LogFileMatcher.hasExceptionOfType( NullPointerException.class )
