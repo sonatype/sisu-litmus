@@ -38,12 +38,10 @@ public class TestDataRuleTest
     /**
      * Test that a file is resolved from root directory.
      *
-     * @throws java.io.FileNotFoundException re-thrown
      * @since 1.0
      */
     @Test
     public void resolveFromRoot()
-        throws FileNotFoundException
     {
         File file = underTest.resolveFile( "from-root" );
         assertThat( file, is( equalTo( util.resolveFile(
@@ -54,12 +52,10 @@ public class TestDataRuleTest
     /**
      * Test that a file is resolved from package directory in root directory.
      *
-     * @throws java.io.FileNotFoundException re-thrown
      * @since 1.0
      */
     @Test
     public void resolveFromPackage()
-        throws FileNotFoundException
     {
         File file = underTest.resolveFile( "from-package" );
         assertThat( file, is( equalTo( util.resolveFile(
@@ -68,14 +64,26 @@ public class TestDataRuleTest
     }
 
     /**
+     * Test that a file is resolved from some middle package directory in root directory.
+     *
+     * @since 1.6.1
+     */
+    @Test
+    public void resolveFromMiddlePackage()
+    {
+        File file = underTest.resolveFile( "from-middle-package" );
+        assertThat( file, is( equalTo( util.resolveFile(
+            "src/test/uncopied-resources/org/sonatype/sisu/litmus/from-middle-package"
+        ) ) ) );
+    }
+
+    /**
      * Test that a file is resolved from class directory in root directory.
      *
-     * @throws java.io.FileNotFoundException re-thrown
      * @since 1.0
      */
     @Test
     public void resolveFromClass()
-        throws FileNotFoundException
     {
         File file = underTest.resolveFile( "from-class" );
         assertThat( file, is( equalTo( util.resolveFile(
@@ -86,17 +94,27 @@ public class TestDataRuleTest
     /**
      * Test that a file is resolved from method directory in root directory.
      *
-     * @throws java.io.FileNotFoundException re-thrown
      * @since 1.0
      */
     @Test
     public void resolveFromMethod()
-        throws FileNotFoundException
     {
         File file = underTest.resolveFile( "from-method" );
         assertThat( file, is( equalTo( util.resolveFile(
             "src/test/uncopied-resources/" + TestDataRule.asPath( getClass() ) + "/resolveFromMethod/from-method"
         ) ) ) );
+    }
+
+    /**
+     * Test that a RuntimeException is thrown when file does not exist.
+     *
+     * @since 1.6.1
+     */
+    @Test( expected = RuntimeException.class )
+    public void resolveInexistent()
+        throws Exception
+    {
+        underTest.resolveFile( "foo" );
     }
 
 }

@@ -27,9 +27,7 @@ public interface TestData
      * <p/>
      * It searches the following path locations:<br/>
      * {@code <dataDir>/<test class package>/<test class name>/<test method name>/</path>}<br/>
-     * {@code <dataDir>/<test class package>/<test class name>/<path>}<br/>
-     * {@code <dataDir>/<test class package>/<path>}<br/>
-     * {@code <dataDir>/<path>}<br/>
+     * {@code all parent directories of above up to and including <dataDir>}
      *
      * @param path path to look up
      * @return found file

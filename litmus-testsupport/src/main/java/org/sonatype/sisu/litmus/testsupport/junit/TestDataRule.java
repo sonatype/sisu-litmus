@@ -63,81 +63,23 @@ public class TestDataRule
     public File resolveFile( final String path )
     {
         checkState( description != null, "Test was not yet initialized" );
-        File level1 = testMethodSourceDirectory( path );
-        if ( level1.exists() )
+        File dir = file( dataDir, asPath( description.getTestClass() ), mn( description.getMethodName() ) );
+        do
         {
-            return level1;
+            final File file = file( dir, path );
+            if ( file.exists() )
+            {
+                return file;
+            }
+            dir = dir.getParentFile();
         }
-        File level2 = resolveFromClassDirectory( path );
-        if ( level2.exists() )
-        {
-            return level2;
-        }
-        File level3 = resolveFromPackageDirectory( path );
-        if ( level3.exists() )
-        {
-            return level3;
-        }
-        File level4 = resolveFromDataDirectory( path );
-        if ( level4.exists() )
-        {
-            return level4;
-        }
+        while ( !dir.equals( dataDir.getParentFile() ) && dataDir.getParentFile() != null );
+
         throw new RuntimeException(
-            "Path " + path + " not found in any of: " + level1 + ", " + level2 + ", " + level3 + ", " + level4
+            "Path " + path + " not found in any of "
+                + file( dataDir, asPath( description.getTestClass() ), mn( description.getMethodName() ) )
+                + " or its parent directories"
         );
-    }
-
-    /**
-     * Returns a test data file.
-     * <p/>
-     * Format: {@code <dataDir>/</path>}
-     *
-     * @param path path to be appended
-     * @return test source directory specific to running test + provided path
-     */
-    private File resolveFromDataDirectory( final String path )
-    {
-        return file( dataDir, path );
-    }
-
-    /**
-     * Returns a test data file.
-     * <p/>
-     * Format: {@code <dataDir>/<test class package>/</path>}
-     *
-     * @param path path to be appended
-     * @return test source directory specific to running test class package + provided path
-     */
-    private File resolveFromPackageDirectory( String path )
-    {
-        return file( dataDir, asPath( description.getTestClass().getPackage() ), path );
-    }
-
-    /**
-     * Returns a test data file.
-     * <p/>
-     * Format: {@code <dataDir>/<test class package>/<test class name>/</path>}
-     *
-     * @param path path to be appended
-     * @return test source directory specific to running test class + provided path
-     */
-    private File resolveFromClassDirectory( String path )
-    {
-        return file( dataDir, asPath( description.getTestClass() ), path );
-    }
-
-    /**
-     * Returns a test data file.
-     * <p/>
-     * Format: {@code <dataDir>/<test class package>/<test class name>/<test method name>/</path>}
-     *
-     * @param path path to be appended
-     * @return test source directory specific to running test method + provided path
-     */
-    private File testMethodSourceDirectory( String path )
-    {
-        return file( dataDir, asPath( description.getTestClass() ), mn( description.getMethodName() ), path );
     }
 
     /**
