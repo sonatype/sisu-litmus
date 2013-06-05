@@ -342,7 +342,7 @@ public class BeanMatchers {
             if (match(actualValue.getClass().isArray(), is(true), "Is an array")) {
                 final Object[] expectedArray = (Object[]) expectedValue;
                 final Object[] actualArray = (Object[]) actualValue;
-                final SimilarMatcher<?>[] itemsMatchers = new SimilarMatcher[expectedArray.length];
+                final SimilarMatcher<? super Object>[] itemsMatchers = new SimilarMatcher[expectedArray.length];
                 for (int i = 0; i < expectedArray.length; i++) {
                     itemsMatchers[i] = new SimilarMatcher<Object>(expectedArray[i], "[" + i + "]", this);
                 }
@@ -366,7 +366,7 @@ public class BeanMatchers {
             if (match(actualValue, isA(Iterator.class), "Is an iterator")) {
                 final List<?> expectedList = Lists.newArrayList((Iterator<?>) expectedValue);
                 final List<?> actualList = Lists.newArrayList((Iterator<?>) actualValue);
-                final SimilarMatcher<?>[] itemsMatchers = new SimilarMatcher[expectedList.size()];
+                final SimilarMatcher<? super Object>[] itemsMatchers = new SimilarMatcher[expectedList.size()];
                 int i = 0;
                 for (final Object expectedElement : expectedList) {
                     itemsMatchers[i] = new SimilarMatcher<Object>(expectedElement, null, this);

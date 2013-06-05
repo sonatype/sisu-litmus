@@ -35,7 +35,7 @@ public class LogFileMatcherTest
 {
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
 
     @Rule
     public TestInfoRule testInfo = new TestInfoRule();
