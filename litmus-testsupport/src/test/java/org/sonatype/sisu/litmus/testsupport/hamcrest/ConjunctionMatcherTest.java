@@ -40,7 +40,7 @@ public class ConjunctionMatcherTest
 {
 
     @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none().handleAssertionErrors();
 
     /**
      * Verify that a null matcher element is not allowed.
