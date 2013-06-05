@@ -13,188 +13,190 @@
     See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.sisu.litmus</groupId>
-        <artifactId>litmus</artifactId>
-        <version>1.6.1-SNAPSHOT</version>
-    </parent>
+  <parent>
+    <groupId>org.sonatype.sisu.litmus</groupId>
+    <artifactId>litmus</artifactId>
+    <version>1.7-SNAPSHOT</version>
+  </parent>
 
-    <artifactId>litmus-testsupport</artifactId>
+  <artifactId>litmus-testsupport</artifactId>
+  <name>${project.groupId}:${project.artifactId}</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.sonatype.gossip</groupId>
-            <artifactId>gossip-support</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.sonatype.gossip</groupId>
+      <artifactId>gossip-support</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>com.intellij</groupId>
-            <artifactId>annotations</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>com.intellij</groupId>
+      <artifactId>annotations</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-junit</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-junit</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>info.cukes</groupId>
-            <artifactId>cucumber-guice</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>info.cukes</groupId>
+      <artifactId>cucumber-guice</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit-dep</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.databene</groupId>
-            <artifactId>contiperf</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.databene</groupId>
+      <artifactId>contiperf</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.easytesting</groupId>
-            <artifactId>fest-assert-core</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert-core</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.incava</groupId>
-            <artifactId>java-diff</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.incava</groupId>
+      <artifactId>java-diff</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.objenesis</groupId>
+      <artifactId>objenesis</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4-rule</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4-rule</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-classloading-xstream</artifactId>
-        </dependency>
+    <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-classloading-xstream</artifactId>
+    </dependency>
 
-        <dependency>
-            <groupId>com.googlecode.junit-ext</groupId>
-            <artifactId>junit-ext</artifactId>
-            <classifier>junit45</classifier>
-        </dependency>
+    <dependency>
+      <groupId>com.googlecode.junit-ext</groupId>
+      <artifactId>junit-ext</artifactId>
+      <classifier>junit45</classifier>
+    </dependency>
 
-        <!-- inject package -->
-        <dependency>
-            <groupId>org.sonatype.sisu</groupId>
-            <artifactId>sisu-inject-bean</artifactId>
-            <exclusions>
-                <!-- Exclude no_aop guice; require aop-enabled version -->
-                <exclusion>
-                    <groupId>org.sonatype.sisu</groupId>
-                    <artifactId>sisu-guice</artifactId>
-                </exclusion>
-            </exclusions>
-            <optional>true</optional>
-        </dependency>
+    <!-- inject package -->
+    <dependency>
+      <groupId>org.sonatype.sisu</groupId>
+      <artifactId>sisu-inject-bean</artifactId>
+      <exclusions>
+        <!-- Exclude no_aop guice; require aop-enabled version -->
+        <exclusion>
+          <groupId>org.sonatype.sisu</groupId>
+          <artifactId>sisu-guice</artifactId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
+    </dependency>
 
-        <dependency>
-            <groupId>org.sonatype.sisu</groupId>
-            <artifactId>sisu-guice</artifactId>
-            <optional>true</optional>
-        </dependency>
+    <dependency>
+      <groupId>org.sonatype.sisu</groupId>
+      <artifactId>sisu-guice</artifactId>
+      <optional>true</optional>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
-    <build>
-        <plugins>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>0.8.1</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.sonatype.sisu.jacksbee</groupId>
+            <artifactId>jacksbee-xjc</artifactId>
+            <version>1.1.1</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <extension>true</extension>
+          <schemaDirectory>src/main/schema</schemaDirectory>
+          <plugins>
             <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.sonatype.sisu.jacksbee</groupId>
-                        <artifactId>jacksbee-xjc</artifactId>
-                        <version>1.1.1</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <extension>true</extension>
-                    <schemaDirectory>src/main/schema</schemaDirectory>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.sonatype.sisu.jacksbee</groupId>
-                            <artifactId>jacksbee-xjc</artifactId>
-                            <version>1.1.1</version>
-                        </plugin>
-                    </plugins>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <args>
-                                <arg>-Xsetters</arg>
-                                <arg>-Xfluent-api</arg>
-                                <arg>-Xgenerated</arg>
-                                <arg>-Xannotate</arg>
-                                <arg>-XxstreamAlias</arg>
-                            </args>
-                        </configuration>
-                    </execution>
-                </executions>
+              <groupId>org.sonatype.sisu.jacksbee</groupId>
+              <artifactId>jacksbee-xjc</artifactId>
+              <version>1.1.1</version>
             </plugin>
-        </plugins>
-    </build>
+          </plugins>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <args>
+                <arg>-Xsetters</arg>
+                <arg>-Xfluent-api</arg>
+                <arg>-Xgenerated</arg>
+                <arg>-Xannotate</arg>
+                <arg>-XxstreamAlias</arg>
+              </args>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
