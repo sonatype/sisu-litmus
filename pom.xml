@@ -233,14 +233,6 @@
   <build>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -255,7 +247,7 @@
             <configuration>
               <rules>
                 <requireMavenVersion>
-                  <version>[3.0,)</version>
+                  <version>[3.0.4,)</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
                   <version>[1.6,)</version>
@@ -263,7 +255,7 @@
                 <bannedDependencies>
                   <searchTransitive>true</searchTransitive>
                   <excludes>
-                    <!-- Keep junit out, use junit-dep instead -->
+                    <!-- Keep old junits out -->
                     <exclude>junit:junit:(,4.10]</exclude>
                     <exclude>junit:junit-dep</exclude>
 
