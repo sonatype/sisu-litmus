@@ -20,7 +20,7 @@
   <parent>
     <groupId>org.sonatype.forge</groupId>
     <artifactId>forge-parent</artifactId>
-    <version>35</version>
+    <version>38</version>
   </parent>
 
   <groupId>org.sonatype.sisu.litmus</groupId>
@@ -39,8 +39,8 @@
   </scm>
 
   <ciManagement>
-    <system>Hudson</system>
-    <url>https://builds.sonatype.org/job/sisu-litmus</url>
+    <system>Bamboo</system>
+    <url>https://bamboo.zion.sonatype.com/browse/SISU-LITMUS</url>
   </ciManagement>
 
   <issueManagement>
