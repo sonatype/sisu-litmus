@@ -13,8 +13,7 @@
     See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -27,7 +26,7 @@
   <artifactId>litmus</artifactId>
   <name>${project.groupId}:${project.artifactId}</name>
   <packaging>pom</packaging>
-  <version>1.7-SNAPSHOT</version>
+  <version>1.7</version>
 
   <url>https://github.com/sonatype/sisu-litmus</url>
   <inceptionYear>2011</inceptionYear>
@@ -51,7 +50,7 @@
   <properties>
     <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
     <build.timestamp>${maven.build.timestamp}</build.timestamp>
-    <build.number/>
+    <build.number />
     <powermock.version>1.5</powermock.version>
   </properties>
 
@@ -325,7 +324,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore/>
+                        <ignore />
                       </action>
                     </pluginExecution>
                   </pluginExecutions>
