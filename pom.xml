@@ -126,6 +126,12 @@
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.11</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
@@ -150,12 +156,32 @@
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>1.9.5</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-module-junit4</artifactId>
         <version>${powermock.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
@@ -180,6 +206,12 @@
         <groupId>org.powermock</groupId>
         <artifactId>powermock-classloading-xstream</artifactId>
         <version>${powermock.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <!-- mockito-core and powermock-reflect depend on different versions of objenesis, force newest -->
