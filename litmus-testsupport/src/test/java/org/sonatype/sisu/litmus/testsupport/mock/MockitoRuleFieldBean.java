@@ -10,38 +10,43 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.mock;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+
 import org.mockito.ArgumentCaptor;
 
 /**
  * This tests @InjectMocks field injection
+ *
  * @see MockitoRuleTest
  * @since 1.3
  */
-public class MockitoRuleFieldBean {
+public class MockitoRuleFieldBean
+{
 
-    private HashSet<String> spySet;
-    private LinkedHashMap<String, String> spyMap;
-    private ArgumentCaptor<String> captor;
+  private HashSet<String> spySet;
 
-    public MockitoRuleFieldBean() {
-    }
+  private LinkedHashMap<String, String> spyMap;
 
-    public ArgumentCaptor<String> getCaptor() {
-        return captor;
-    }
+  private ArgumentCaptor<String> captor;
 
-    public HashSet<String> getSpySet() {
-        return spySet;
-    }
+  public MockitoRuleFieldBean() {
+  }
 
-    public LinkedHashMap<String, String> getSpyMap() {
-        return spyMap;
-    }
+  public ArgumentCaptor<String> getCaptor() {
+    return captor;
+  }
+
+  public HashSet<String> getSpySet() {
+    return spySet;
+  }
+
+  public LinkedHashMap<String, String> getSpyMap() {
+    return spyMap;
+  }
 
 
 }

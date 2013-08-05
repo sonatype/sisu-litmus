@@ -10,12 +10,14 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.group;
 
 /**
  * Marker interface to categorize a test as requiring some sort of external resource to properly run.
  * <p/>
- * An external resource is a resource not controlled directly by the test or its fixture, for example a public website or
+ * An external resource is a resource not controlled directly by the test or its fixture, for example a public website
+ * or
  * internal database or email server running on another host. The resource is not external if it is launched by the
  * testing framework that sets up the test.
  *

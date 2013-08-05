@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.hamcrest;
 
 import java.net.URL;
@@ -17,15 +18,16 @@ import java.net.URL;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 
-public class URLMatchers {
+public class URLMatchers
+{
 
-    @Factory
-    public static Matcher<URL> respondsWithStatus(Integer statusCode){
-        return new URLRespondsWithStatusMatcher(statusCode);
-    }
+  @Factory
+  public static Matcher<URL> respondsWithStatus(Integer statusCode) {
+    return new URLRespondsWithStatusMatcher(statusCode);
+  }
 
-    @Factory
-    public static Matcher<URL> respondsWithStatusWithin(int statusCode, int timeoutMillis){
-        return new URLRespondsWithStatusMatcher(statusCode, timeoutMillis);
-    }
+  @Factory
+  public static Matcher<URL> respondsWithStatusWithin(int statusCode, int timeoutMillis) {
+    return new URLRespondsWithStatusMatcher(statusCode, timeoutMillis);
+  }
 }

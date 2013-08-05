@@ -10,17 +10,18 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.sonatype.gossip.Level;
 
 import org.jetbrains.annotations.NonNls;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.rules.TestName;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
-import org.sonatype.gossip.Level;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Support for tests.
@@ -30,50 +31,43 @@ import org.sonatype.gossip.Level;
 public class TestSupport
 {
 
-    protected final TestUtil util = new TestUtil( this );
+  protected final TestUtil util = new TestUtil(this);
 
-    @NonNls
-    protected final Logger logger = util.getLog();
+  @NonNls
+  protected final Logger logger = util.getLog();
 
-    private Level logLevel = Level.INFO;
+  private Level logLevel = Level.INFO;
 
-    @Rule
-    public final TestTracer tracer = new TestTracer( this );
+  @Rule
+  public final TestTracer tracer = new TestTracer(this);
 
-    @Before
-    public void initMocks()
-    {
-        MockitoAnnotations.initMocks( this );
-    }
+  @Before
+  public void initMocks() {
+    MockitoAnnotations.initMocks(this);
+  }
 
-    public Level getLogLevel()
-    {
-        return logLevel;
-    }
+  public Level getLogLevel() {
+    return logLevel;
+  }
 
-    public void setLogLevel( final Level logLevel )
-    {
-        this.logLevel = checkNotNull( logLevel );
-    }
+  public void setLogLevel(final Level logLevel) {
+    this.logLevel = checkNotNull(logLevel);
+  }
 
-    protected void log( final @NonNls String message )
-    {
-        logLevel.log( logger, message );
-    }
+  protected void log(final @NonNls String message) {
+    logLevel.log(logger, message);
+  }
 
-    protected void log( final Object value )
-    {
-        logLevel.log( logger, String.valueOf( value ) );
-    }
+  protected void log(final Object value) {
+    logLevel.log(logger, String.valueOf(value));
+  }
 
-    protected void log( final @NonNls String format, final Object... args )
-    {
-        logLevel.log( logger, format, args );
-    }
+  protected void log(final @NonNls String format, final Object... args) {
+    logLevel.log(logger, format, args);
+  }
 
-    protected void log( final @NonNls String message, final Throwable cause )
-    {
-        logLevel.log( logger, message, cause );
-    }
+  protected void log(final @NonNls String message, final Throwable cause) {
+    logLevel.log(logger, message, cause);
+  }
 
 }

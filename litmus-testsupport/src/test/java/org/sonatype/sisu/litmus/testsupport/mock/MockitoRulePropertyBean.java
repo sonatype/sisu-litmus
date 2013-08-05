@@ -10,39 +10,42 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.mock;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 /**
  * Tests @InjectMocks property injection
+ *
  * @see MockitoRuleTest
  * @since 1.3
  */
-public class MockitoRulePropertyBean {
+public class MockitoRulePropertyBean
+{
 
-    private HashSet<String> spySet;
-    private LinkedHashMap<String, String> spyMap;
+  private HashSet<String> spySet;
 
-    // no-arg constructor required for setter inject
-    public MockitoRulePropertyBean() {
-    }
+  private LinkedHashMap<String, String> spyMap;
 
-    public void setSpyMap(LinkedHashMap<String, String> spyMap) {
-        this.spyMap = spyMap;
-    }
+  // no-arg constructor required for setter inject
+  public MockitoRulePropertyBean() {
+  }
 
-    public void setSpySet(HashSet<String> spySet) {
-        this.spySet = spySet;
-    }
+  public void setSpyMap(LinkedHashMap<String, String> spyMap) {
+    this.spyMap = spyMap;
+  }
 
-    public HashSet<String> getSpySet() {
-        return spySet;
-    }
+  public void setSpySet(HashSet<String> spySet) {
+    this.spySet = spySet;
+  }
 
-    public LinkedHashMap<String, String> getSpyMap() {
-        return spyMap;
-    }
+  public HashSet<String> getSpySet() {
+    return spySet;
+  }
+
+  public LinkedHashMap<String, String> getSpyMap() {
+    return spyMap;
+  }
 }

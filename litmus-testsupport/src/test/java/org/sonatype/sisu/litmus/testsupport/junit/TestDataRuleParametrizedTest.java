@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.junit;
 
 import java.util.Arrays;
@@ -23,21 +24,19 @@ import org.junit.runners.Parameterized;
  *
  * @since 1.4
  */
-@RunWith( Parameterized.class )
+@RunWith(Parameterized.class)
 public class TestDataRuleParametrizedTest
     extends TestDataRuleTest
 {
 
-    @Parameterized.Parameters()
-    public static Collection<Object[]> data()
-    {
-        return Arrays.asList( new Object[][]{
-            { "foo" }
-        } );
-    }
+  @Parameterized.Parameters()
+  public static Collection<Object[]> data() {
+    return Arrays.asList(new Object[][]{
+        {"foo"}
+    });
+  }
 
-    public TestDataRuleParametrizedTest( final String param )
-    {
-    }
+  public TestDataRuleParametrizedTest(final String param) {
+  }
 
 }

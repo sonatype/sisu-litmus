@@ -14,19 +14,19 @@
 
 -->
 <configuration>
-    <!--
-    NOTE: Using logback.xml for this file explicitly since this is a fallback configuration.
-    NOTE: Tests can customize by providing a logback-test.xml, which will be preferred if found.
-    NOTE: See http://logback.qos.ch/manual/configuration.html for more information.
-    -->
+  <!--
+  NOTE: Using logback.xml for this file explicitly since this is a fallback configuration.
+  NOTE: Tests can customize by providing a logback-test.xml, which will be preferred if found.
+  NOTE: See http://logback.qos.ch/manual/configuration.html for more information.
+  -->
 
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{HH:mm:ss.SSS} %level [%thread%X{DC}] %logger - %msg%n</Pattern>
-        </encoder>
-    </appender>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <Pattern>%d{HH:mm:ss.SSS} %level [%thread%X{DC}] %logger - %msg%n</Pattern>
+    </encoder>
+  </appender>
 
-    <root level="${test.log.level:-INFO}">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+  <root level="${test.log.level:-INFO}">
+    <appender-ref ref="CONSOLE"/>
+  </root>
 </configuration>

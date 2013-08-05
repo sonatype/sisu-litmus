@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.net;
 
 import java.security.cert.CertificateException;
@@ -27,36 +28,35 @@ public class TrustingX509TrustManager
     extends X509ExtendedTrustManager
 {
 
-    @Override
-    public void checkClientTrusted( final X509Certificate[] x509Certificates, final String s, final String s1,
-                                    final String s2 )
-        throws CertificateException
-    {
-    }
+  @Override
+  public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s, final String s1,
+                                 final String s2)
+      throws CertificateException
+  {
+  }
 
-    @Override
-    public void checkServerTrusted( final X509Certificate[] x509Certificates, final String s, final String s1,
-                                    final String s2 )
-        throws CertificateException
-    {
-    }
+  @Override
+  public void checkServerTrusted(final X509Certificate[] x509Certificates, final String s, final String s1,
+                                 final String s2)
+      throws CertificateException
+  {
+  }
 
-    @Override
-    public void checkClientTrusted( final X509Certificate[] x509Certificates, final String s )
-        throws CertificateException
-    {
-    }
+  @Override
+  public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s)
+      throws CertificateException
+  {
+  }
 
-    @Override
-    public void checkServerTrusted( final X509Certificate[] x509Certificates, final String s )
-        throws CertificateException
-    {
-    }
+  @Override
+  public void checkServerTrusted(final X509Certificate[] x509Certificates, final String s)
+      throws CertificateException
+  {
+  }
 
-    @Override
-    public X509Certificate[] getAcceptedIssuers()
-    {
-        return new X509Certificate[0];
-    }
+  @Override
+  public X509Certificate[] getAcceptedIssuers() {
+    return new X509Certificate[0];
+  }
 }
 

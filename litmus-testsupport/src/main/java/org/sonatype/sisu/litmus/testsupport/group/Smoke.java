@@ -10,10 +10,12 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.group;
 
 /**
- * Marker interface to <b>categorize an integration test</b> as part of the minimal set of tests that a developer should
+ * Marker interface to <b>categorize an integration test</b> as part of the minimal set of tests that a developer
+ * should
  * execute before pushing new code.
  * <p/>
  * For unit tests, it is considered best practice to ensure <b>ALL</b> of your unit tests pass as the minimal measure

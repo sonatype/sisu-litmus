@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport;
 
 import java.io.File;
@@ -22,16 +23,16 @@ import java.io.File;
 public interface TestData
 {
 
-    /**
-     * Resolves a test data file by looking up the specified path into data directory.
-     * <p/>
-     * It searches the following path locations:<br/>
-     * {@code <dataDir>/<test class package>/<test class name>/<test method name>/</path>}<br/>
-     * {@code all parent directories of above up to and including <dataDir>}
-     *
-     * @param path path to look up
-     * @return found file
-     */
-    File resolveFile( String path );
+  /**
+   * Resolves a test data file by looking up the specified path into data directory.
+   * <p/>
+   * It searches the following path locations:<br/>
+   * {@code <dataDir>/<test class package>/<test class name>/<test method name>/</path>}<br/>
+   * {@code all parent directories of above up to and including <dataDir>}
+   *
+   * @param path path to look up
+   * @return found file
+   */
+  File resolveFile(String path);
 
 }

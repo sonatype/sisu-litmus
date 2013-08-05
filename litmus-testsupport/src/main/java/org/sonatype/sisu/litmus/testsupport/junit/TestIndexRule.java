@@ -10,13 +10,8 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
-package org.sonatype.sisu.litmus.testsupport.junit;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-import static java.lang.Boolean.TRUE;
-import static javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT;
-import static javax.xml.bind.Marshaller.JAXB_FRAGMENT;
+package org.sonatype.sisu.litmus.testsupport.junit;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,22 +21,30 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 import org.sonatype.sisu.litmus.testsupport.TestIndex;
 import org.sonatype.sisu.litmus.testsupport.junit.index.IndexXO;
 import org.sonatype.sisu.litmus.testsupport.junit.index.TestInfoXO;
 import org.sonatype.sisu.litmus.testsupport.junit.index.TestXO;
+
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.base.Throwables;
 import com.google.common.io.CharStreams;
 import com.google.common.io.Files;
 import com.google.common.io.Resources;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
+import static java.lang.Boolean.TRUE;
+import static javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT;
+import static javax.xml.bind.Marshaller.JAXB_FRAGMENT;
 
 /**
  * JUnit rule for creating/accessing directories/files unique to a test method/run. The rule will create a mapping file
@@ -101,389 +104,348 @@ public class TestIndexRule
     implements TestIndex
 {
 
-    /**
-     * The root directory that contains the the index and eventual linked & copied files.
-     * The root directory that contains the the index and eventual linked & copied files.
-     * Never null.
-     */
-    private final File indexDir;
+  /**
+   * The root directory that contains the the index and eventual linked & copied files.
+   * The root directory that contains the the index and eventual linked & copied files.
+   * Never null.
+   */
+  private final File indexDir;
 
-    /**
-     * The root directory that contains test specific directories.
-     * Never null.
-     */
-    private File dataDir;
+  /**
+   * The root directory that contains test specific directories.
+   * Never null.
+   */
+  private File dataDir;
 
-    /**
-     * Test description.
-     * Set when test starts.
-     */
-    private Description description;
+  /**
+   * Test description.
+   * Set when test starts.
+   */
+  private Description description;
 
-    /**
-     * Timestamp when test was started.
-     */
-    private Stopwatch stopwatch;
+  /**
+   * Timestamp when test was started.
+   */
+  private Stopwatch stopwatch;
 
-    /**
-     * True if the rule is initialized.
-     * Used to lazy create an index entry on first usage.
-     */
-    private boolean initialized;
+  /**
+   * True if the rule is initialized.
+   * Used to lazy create an index entry on first usage.
+   */
+  private boolean initialized;
 
-    /**
-     * Test specific directory of format ${indexDir}/${counter}.
-     * Lazy initialized upon first usage.
-     */
-    private File testDir;
+  /**
+   * Test specific directory of format ${indexDir}/${counter}.
+   * Lazy initialized upon first usage.
+   */
+  private File testDir;
 
-    /**
-     * File contained indexing information.
-     * Lazy initialized upon first usage.
-     */
-    private File indexXml;
+  /**
+   * File contained indexing information.
+   * Lazy initialized upon first usage.
+   */
+  private File indexXml;
 
-    /**
-     * Index data.
-     * Lazy initialized upon first usage.
-     */
-    private IndexXO index;
+  /**
+   * Index data.
+   * Lazy initialized upon first usage.
+   */
+  private IndexXO index;
 
-    /**
-     * Index test data.
-     * Lazy initialized upon first usage.
-     */
-    private TestXO test;
+  /**
+   * Index test data.
+   * Lazy initialized upon first usage.
+   */
+  private TestXO test;
 
-    /**
-     * Constructor.
-     *
-     * @param indexDir root directory that contains the index and test specific directories (cannot be null)
-     */
-    public TestIndexRule( final File indexDir )
-    {
-        this.indexDir = indexDir;
-        this.dataDir = indexDir;
+  /**
+   * Constructor.
+   *
+   * @param indexDir root directory that contains the index and test specific directories (cannot be null)
+   */
+  public TestIndexRule(final File indexDir) {
+    this.indexDir = indexDir;
+    this.dataDir = indexDir;
+  }
+
+  /**
+   * Constructor.
+   *
+   * @param indexDir root directory that contains the index (cannot be null)
+   * @param dataDir  root directory that contains the test specific directories (cannot be null)
+   */
+  public TestIndexRule(final File indexDir, final File dataDir) {
+    this.dataDir = dataDir;
+    this.indexDir = indexDir;
+  }
+
+  @Override
+  protected void starting(final Description description) {
+    this.description = Preconditions.checkNotNull(description);
+    this.stopwatch = new Stopwatch().start();
+  }
+
+  @Override
+  protected void succeeded(final Description description) {
+    initialize();
+    test.setSuccess(true);
+  }
+
+  @Override
+  protected void failed(final Throwable e, final Description description) {
+    initialize();
+    test.setSuccess(false);
+    final StringWriter sw = new StringWriter();
+    final PrintWriter pw = new PrintWriter(sw);
+    e.printStackTrace(pw);
+    test.setThrowableMessage(e.getMessage());
+    test.setThrowableStacktrace(sw.toString());
+  }
+
+  @Override
+  protected void finished(final Description description) {
+    initialize();
+    test.setDuration(stopwatch.stop().elapsedTime(TimeUnit.SECONDS));
+    save();
+  }
+
+  @Override
+  public File getDirectory() {
+    initialize();
+    return testDir;
+  }
+
+  @Override
+  public File getDirectory(final String name) {
+    final File dir = new File(getDirectory(), name);
+    checkState(
+        (dir.mkdirs() || dir.exists()) && dir.isDirectory(),
+        "Not able to create test directory '%s'",
+        dir.getAbsolutePath()
+    );
+    return dir;
+  }
+
+  @Override
+  public void recordInfo(final String key, final String value) {
+    recordInfo(key, value, false);
+  }
+
+  @Override
+  public void recordLink(final String key, final String value) {
+    recordInfo(key, value, true);
+  }
+
+  @Override
+  public void recordLink(final String key, final File file) {
+    if (file.exists()) {
+      initialize();
+      try {
+        recordLink(key, calculateRelativePath(indexDir, file));
+      }
+      catch (IOException e) {
+        throw Throwables.propagate(e);
+      }
     }
+  }
 
-    /**
-     * Constructor.
-     *
-     * @param indexDir root directory that contains the index (cannot be null)
-     * @param dataDir  root directory that contains the test specific directories (cannot be null)
-     */
-    public TestIndexRule( final File indexDir, final File dataDir )
-    {
-        this.dataDir = dataDir;
-        this.indexDir = indexDir;
-    }
+  @Override
+  public void recordAndCopyLink(final String key, final File file) {
+    if (file.exists()) {
+      initialize();
+      final File reportsDir = new File(indexDir, getDirectory().getName());
+      checkState(
+          (reportsDir.mkdirs() || reportsDir.exists()) && reportsDir.isDirectory(),
+          "Not able to create reports directory '%s'",
+          reportsDir.getAbsolutePath()
+      );
+      try {
+        File copied;
+        if (file.getAbsolutePath().startsWith(dataDir.getAbsolutePath())) {
+          copied = new File(reportsDir, calculateRelativePath(getDirectory(), file));
+        }
+        else {
+          String copiedFileName = file.getName();
+          String copiedFileExt = "";
+          final int extPos = file.getName().lastIndexOf(".");
+          if (extPos > 0 && copiedFileName.length() > extPos + 1) {
+            copiedFileName = file.getName().substring(0, extPos);
+            copiedFileExt = file.getName().substring(extPos);
+          }
+          String copiedFilePath = copiedFileName + "-" + System.currentTimeMillis() + copiedFileExt;
+          copied = new File(reportsDir, copiedFilePath);
+        }
 
-    @Override
-    protected void starting( final Description description )
-    {
-        this.description = Preconditions.checkNotNull( description );
-        this.stopwatch = new Stopwatch().start();
-    }
-
-    @Override
-    protected void succeeded( final Description description )
-    {
-        initialize();
-        test.setSuccess( true );
-    }
-
-    @Override
-    protected void failed( final Throwable e, final Description description )
-    {
-        initialize();
-        test.setSuccess( false );
-        final StringWriter sw = new StringWriter();
-        final PrintWriter pw = new PrintWriter( sw );
-        e.printStackTrace( pw );
-        test.setThrowableMessage( e.getMessage() );
-        test.setThrowableStacktrace( sw.toString() );
-    }
-
-    @Override
-    protected void finished( final Description description )
-    {
-        initialize();
-        test.setDuration( stopwatch.stop().elapsedTime( TimeUnit.SECONDS ) );
-        save();
-    }
-
-    @Override
-    public File getDirectory()
-    {
-        initialize();
-        return testDir;
-    }
-
-    @Override
-    public File getDirectory( final String name )
-    {
-        final File dir = new File( getDirectory(), name );
+        final File copiedFileDir = copied.getParentFile();
         checkState(
-            ( dir.mkdirs() || dir.exists() ) && dir.isDirectory(),
-            "Not able to create test directory '%s'",
-            dir.getAbsolutePath()
+            (copiedFileDir.mkdirs() || copiedFileDir.exists()) && copiedFileDir.isDirectory(),
+            "Not able to create directory '%s'",
+            copiedFileDir.getAbsolutePath()
         );
-        return dir;
+        Files.copy(file, copied);
+        recordLink(key, calculateRelativePath(indexDir, copied));
+      }
+      catch (IOException e) {
+        throw Throwables.propagate(e);
+      }
     }
+  }
 
-    @Override
-    public void recordInfo( final String key, final String value )
-    {
-        recordInfo( key, value, false );
+  /**
+   * Records information about current running test.
+   *
+   * @param key   information key
+   * @param value information value
+   * @param link  if value is a link
+   */
+  private void recordInfo(final String key, final String value, final boolean link) {
+    checkNotNull(key);
+    checkNotNull(value);
+    initialize();
+    removeInfoWithKey(key);
+    test.withTestInfos(new TestInfoXO().withLink(false).withKey(key).withValue(value).withLink(link));
+  }
+
+  /**
+   * Removes info for specified key, if exists.
+   *
+   * @param key of info to be removed
+   */
+  private void removeInfoWithKey(final String key) {
+    final List<TestInfoXO> testInfos = test.getTestInfos();
+    if (testInfos != null && testInfos.size() > 0) {
+      final Iterator<TestInfoXO> it = testInfos.iterator();
+      while (it.hasNext()) {
+        final TestInfoXO testInfo = it.next();
+        if (key.equals(testInfo.getKey())) {
+          it.remove();
+        }
+      }
     }
+  }
 
-    @Override
-    public void recordLink( final String key, final String value )
-    {
-        recordInfo( key, value, true );
+  /**
+   * Reads the index from ${indexDir}/index.xml and records information about current running test.
+   * It will also create the test specific directory under ${dataDir}.
+   */
+  private void initialize() {
+    checkState(description != null);
+    if (!initialized) {
+      load();
+
+      index.setCounter(index.getCounter() + 1);
+
+      test = new TestXO()
+          .withIndex(index.getCounter())
+          .withClassName(description.getClassName())
+          .withMethodName(description.getMethodName());
+
+      index.withTests(test);
+
+      save();
+      copyStyleSheets();
+
+      testDir = new File(dataDir, String.valueOf(index.getCounter()));
+      checkState(
+          (testDir.mkdirs() || testDir.exists()) && testDir.isDirectory(),
+          "Not able to create test directory '%s'",
+          testDir.getAbsolutePath()
+      );
+
+      initialized = true;
     }
+  }
 
-    @Override
-    public void recordLink( final String key, final File file )
-    {
-        if ( file.exists() )
-        {
-            initialize();
-            try
-            {
-                recordLink( key, calculateRelativePath( indexDir, file ) );
-            }
-            catch ( IOException e )
-            {
-                throw Throwables.propagate( e );
-            }
-        }
+  /**
+   * Copy index CSS and XSLT to ${indexDir} (they are referenced by index.xml), overriding existent ones.
+   */
+  private void copyStyleSheets() {
+    try {
+      Files.copy(
+          Resources.newInputStreamSupplier(Resources.getResource("index.css")),
+          new File(indexDir, "index.css")
+      );
+      Files.copy(
+          Resources.newInputStreamSupplier(Resources.getResource("index.xsl")),
+          new File(indexDir, "index.xsl")
+      );
     }
-
-    @Override
-    public void recordAndCopyLink( final String key, final File file )
-    {
-        if ( file.exists() )
-        {
-            initialize();
-            final File reportsDir = new File( indexDir, getDirectory().getName() );
-            checkState(
-                ( reportsDir.mkdirs() || reportsDir.exists() ) && reportsDir.isDirectory(),
-                "Not able to create reports directory '%s'",
-                reportsDir.getAbsolutePath()
-            );
-            try
-            {
-                File copied;
-                if ( file.getAbsolutePath().startsWith( dataDir.getAbsolutePath() ) )
-                {
-                    copied = new File( reportsDir, calculateRelativePath( getDirectory(), file ) );
-                }
-                else
-                {
-                    String copiedFileName = file.getName();
-                    String copiedFileExt = "";
-                    final int extPos = file.getName().lastIndexOf( "." );
-                    if ( extPos > 0 && copiedFileName.length() > extPos + 1 )
-                    {
-                        copiedFileName = file.getName().substring( 0, extPos );
-                        copiedFileExt = file.getName().substring( extPos );
-                    }
-                    String copiedFilePath = copiedFileName + "-" + System.currentTimeMillis() + copiedFileExt;
-                    copied = new File( reportsDir, copiedFilePath );
-                }
-
-                final File copiedFileDir = copied.getParentFile();
-                checkState(
-                    ( copiedFileDir.mkdirs() || copiedFileDir.exists() ) && copiedFileDir.isDirectory(),
-                    "Not able to create directory '%s'",
-                    copiedFileDir.getAbsolutePath()
-                );
-                Files.copy( file, copied );
-                recordLink( key, calculateRelativePath( indexDir, copied ) );
-            }
-            catch ( IOException e )
-            {
-                throw Throwables.propagate( e );
-            }
-        }
+    catch (IOException e) {
+      // well, that's it!
     }
+  }
 
-    /**
-     * Records information about current running test.
-     *
-     * @param key   information key
-     * @param value information value
-     * @param link  if value is a link
-     */
-    private void recordInfo( final String key, final String value, final boolean link )
-    {
-        checkNotNull( key );
-        checkNotNull( value );
-        initialize();
-        removeInfoWithKey( key );
-        test.withTestInfos( new TestInfoXO().withLink( false ).withKey( key ).withValue( value ).withLink( link ) );
+  /**
+   * Loads index data from ${indexDir}/index.xml.
+   */
+  private void load() {
+    indexXml = new File(indexDir, "index.xml");
+    index = new IndexXO().withCounter(0);
+    if (indexXml.exists()) {
+      try {
+        final Unmarshaller unmarshaller = JAXBContext.newInstance(IndexXO.class).createUnmarshaller();
+        index = (IndexXO) unmarshaller.unmarshal(indexXml);
+      }
+      catch (Exception e) {
+        // TODO Should we fail the test if we cannot write the index?
+        throw Throwables.propagate(e);
+      }
     }
+  }
 
-    /**
-     * Removes info for specified key, if exists.
-     *
-     * @param key of info to be removed
-     */
-    private void removeInfoWithKey( final String key )
-    {
-        final List<TestInfoXO> testInfos = test.getTestInfos();
-        if ( testInfos != null && testInfos.size() > 0 )
-        {
-            final Iterator<TestInfoXO> it = testInfos.iterator();
-            while ( it.hasNext() )
-            {
-                final TestInfoXO testInfo = it.next();
-                if ( key.equals( testInfo.getKey() ) )
-                {
-                    it.remove();
-                }
-            }
-        }
+  /**
+   * Saves index data from ${indexDir}/index.xml.
+   */
+  // @TestAccessible
+  void save() {
+    try {
+      final StringWriter writer = new StringWriter();
+      final PrintWriter printWriter = new PrintWriter(writer);
+
+      printWriter.println("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
+      printWriter.println("<?xml-stylesheet type=\"text/css\" href=\"index.css\"?>");
+      printWriter.println("<?xml-stylesheet type=\"text/xsl\" href=\"index.xsl\"?>");
+
+      final Marshaller marshaller = JAXBContext.newInstance(IndexXO.class).createMarshaller();
+      marshaller.setProperty(JAXB_FORMATTED_OUTPUT, TRUE);
+      marshaller.setProperty(JAXB_FRAGMENT, TRUE);
+      marshaller.marshal(index, writer);
+
+      Files.createParentDirs(indexXml);
+      Files.copy(CharStreams.newReaderSupplier(writer.toString()), indexXml, Charset.forName("UTF-8"));
     }
-
-    /**
-     * Reads the index from ${indexDir}/index.xml and records information about current running test.
-     * It will also create the test specific directory under ${dataDir}.
-     */
-    private void initialize()
-    {
-        checkState( description != null );
-        if ( !initialized )
-        {
-            load();
-
-            index.setCounter( index.getCounter() + 1 );
-
-            test = new TestXO()
-                .withIndex( index.getCounter() )
-                .withClassName( description.getClassName() )
-                .withMethodName( description.getMethodName() );
-
-            index.withTests( test );
-
-            save();
-            copyStyleSheets();
-
-            testDir = new File( dataDir, String.valueOf( index.getCounter() ) );
-            checkState(
-                ( testDir.mkdirs() || testDir.exists() ) && testDir.isDirectory(),
-                "Not able to create test directory '%s'",
-                testDir.getAbsolutePath()
-            );
-
-            initialized = true;
-        }
+    catch (Exception e) {
+      // TODO Should we fail the test if we cannot write the index?
+      throw Throwables.propagate(e);
     }
+  }
 
-    /**
-     * Copy index CSS and XSLT to ${indexDir} (they are referenced by index.xml), overriding existent ones.
-     */
-    private void copyStyleSheets()
-    {
-        try
-        {
-            Files.copy(
-                Resources.newInputStreamSupplier( Resources.getResource( "index.css" ) ),
-                new File( indexDir, "index.css" )
-            );
-            Files.copy(
-                Resources.newInputStreamSupplier( Resources.getResource( "index.xsl" ) ),
-                new File( indexDir, "index.xsl" )
-            );
-        }
-        catch ( IOException e )
-        {
-            // well, that's it!
-        }
+  /**
+   * Calculates the relative path to a given file from a specified file.
+   *
+   * @param from File from which the relative path should be calculated
+   * @param to   File to which the relative path should be calculated
+   * @return relative path
+   * @throws IOException if files have no common sub directories beside the root, or none at all
+   */
+  static String calculateRelativePath(final File from,
+                                      final File to)
+      throws IOException
+  {
+    final File parent = from.getParentFile();
+    if (parent == null) {
+      throw new IOException("File '" + from.getAbsolutePath() + "' cannot be a root directory");
     }
-
-    /**
-     * Loads index data from ${indexDir}/index.xml.
-     */
-    private void load()
-    {
-        indexXml = new File( indexDir, "index.xml" );
-        index = new IndexXO().withCounter( 0 );
-        if ( indexXml.exists() )
-        {
-            try
-            {
-                final Unmarshaller unmarshaller = JAXBContext.newInstance( IndexXO.class ).createUnmarshaller();
-                index = (IndexXO) unmarshaller.unmarshal( indexXml );
-            }
-            catch ( Exception e )
-            {
-                // TODO Should we fail the test if we cannot write the index?
-                throw Throwables.propagate( e );
-            }
-        }
+    final String fromPath = from.getCanonicalPath().replace('\\', '/');
+    final String toPath = to.getCanonicalPath().replace('\\', '/');
+    if (toPath.equals(fromPath)) {
+      return "";
     }
-
-    /**
-     * Saves index data from ${indexDir}/index.xml.
-     */
-    // @TestAccessible
-    void save()
-    {
-        try
-        {
-            final StringWriter writer = new StringWriter();
-            final PrintWriter printWriter = new PrintWriter( writer );
-
-            printWriter.println( "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" );
-            printWriter.println( "<?xml-stylesheet type=\"text/css\" href=\"index.css\"?>" );
-            printWriter.println( "<?xml-stylesheet type=\"text/xsl\" href=\"index.xsl\"?>" );
-
-            final Marshaller marshaller = JAXBContext.newInstance( IndexXO.class ).createMarshaller();
-            marshaller.setProperty( JAXB_FORMATTED_OUTPUT, TRUE );
-            marshaller.setProperty( JAXB_FRAGMENT, TRUE );
-            marshaller.marshal( index, writer );
-
-            Files.createParentDirs( indexXml );
-            Files.copy( CharStreams.newReaderSupplier( writer.toString() ), indexXml, Charset.forName( "UTF-8" ) );
-        }
-        catch ( Exception e )
-        {
-            // TODO Should we fail the test if we cannot write the index?
-            throw Throwables.propagate( e );
-        }
+    if (toPath.startsWith(fromPath)) {
+      return toPath.substring(fromPath.length() + 1);
     }
-
-    /**
-     * Calculates the relative path to a given file from a specified file.
-     *
-     * @param from File from which the relative path should be calculated
-     * @param to   File to which the relative path should be calculated
-     * @return relative path
-     * @throws IOException if files have no common sub directories beside the root, or none at all
-     */
-    static String calculateRelativePath( final File from,
-                                         final File to )
-        throws IOException
-    {
-        final File parent = from.getParentFile();
-        if ( parent == null )
-        {
-            throw new IOException( "File '" + from.getAbsolutePath() + "' cannot be a root directory" );
-        }
-        final String fromPath = from.getCanonicalPath().replace( '\\', '/' );
-        final String toPath = to.getCanonicalPath().replace( '\\', '/' );
-        if ( toPath.equals( fromPath ) )
-        {
-            return "";
-        }
-        if ( toPath.startsWith( fromPath ) )
-        {
-            return toPath.substring( fromPath.length() + 1 );
-        }
-        final String relativePath = calculateRelativePath( parent, to );
-        return ( ".." + ( relativePath.trim().isEmpty() ? "" : "/" + relativePath ) );
-    }
+    final String relativePath = calculateRelativePath(parent, to);
+    return (".." + (relativePath.trim().isEmpty() ? "" : "/" + relativePath));
+  }
 
 }

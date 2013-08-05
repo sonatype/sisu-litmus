@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport;
 
 import java.io.File;
@@ -22,58 +23,58 @@ import java.io.File;
 public interface TestIndex
 {
 
-    /**
-     * Returns a test specific directory of format {@code <indexDir>/<counter>}.
-     * If directory does not exist yet, it will be created.
-     *
-     * @return test specific directory
-     */
-    File getDirectory();
+  /**
+   * Returns a test specific directory of format {@code <indexDir>/<counter>}.
+   * If directory does not exist yet, it will be created.
+   *
+   * @return test specific directory
+   */
+  File getDirectory();
 
-    /**
-     * Returns a test specific directory of format {@code <indexDir>/<counter>/<name>}.
-     * If directory does not exist yet, it will be created.
-     *
-     * @param name name of test specific directory
-     * @return test specific directory. Never null
-     */
-    File getDirectory( String name );
+  /**
+   * Returns a test specific directory of format {@code <indexDir>/<counter>/<name>}.
+   * If directory does not exist yet, it will be created.
+   *
+   * @param name name of test specific directory
+   * @return test specific directory. Never null
+   */
+  File getDirectory(String name);
 
-    /**
-     * Records information about current running test.
-     *
-     * @param key   information key
-     * @param value information value
-     */
-    void recordInfo( String key, String value );
+  /**
+   * Records information about current running test.
+   *
+   * @param key   information key
+   * @param value information value
+   */
+  void recordInfo(String key, String value);
 
-    /**
-     * Records information about current running test.
-     * The value is considered to be a link.
-     *
-     * @param key   information key
-     * @param value information value
-     */
-    void recordLink( String key, String value );
+  /**
+   * Records information about current running test.
+   * The value is considered to be a link.
+   *
+   * @param key   information key
+   * @param value information value
+   */
+  void recordLink(String key, String value);
 
-    /**
-     * Records information about current running test.
-     * The value is considered to be a link to a file and value will be stored as relative to index root dir.
-     * No link is recorded if file does not exist.
-     *
-     * @param key  information key (cannot be null)
-     * @param file linked file (cannot be null)
-     */
-    void recordLink( String key, File file );
+  /**
+   * Records information about current running test.
+   * The value is considered to be a link to a file and value will be stored as relative to index root dir.
+   * No link is recorded if file does not exist.
+   *
+   * @param key  information key (cannot be null)
+   * @param file linked file (cannot be null)
+   */
+  void recordLink(String key, File file);
 
-    /**
-     * Copies and records information about current running test.
-     * The value is considered to be a link to a file and value will be stored as relative to index root dir.
-     * No link is recorded if file does not exist.
-     *
-     * @param key  information key
-     * @param file linked file
-     */
-    void recordAndCopyLink( String key, File file );
+  /**
+   * Copies and records information about current running test.
+   * The value is considered to be a link to a file and value will be stored as relative to index root dir.
+   * No link is recorded if file does not exist.
+   *
+   * @param key  information key
+   * @param file linked file
+   */
+  void recordAndCopyLink(String key, File file);
 
 }

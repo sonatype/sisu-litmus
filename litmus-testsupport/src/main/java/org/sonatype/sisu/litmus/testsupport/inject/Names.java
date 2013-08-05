@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.inject;
 
 /**
@@ -20,8 +21,8 @@ package org.sonatype.sisu.litmus.testsupport.inject;
 public interface Names
 {
 
-    static final String BASE_DIR = "basedir";
+  static final String BASE_DIR = "basedir";
 
-    static final String BASE_DIR_CONF = "${" + BASE_DIR + ":-.}";
+  static final String BASE_DIR_CONF = "${" + BASE_DIR + ":-.}";
 
 }

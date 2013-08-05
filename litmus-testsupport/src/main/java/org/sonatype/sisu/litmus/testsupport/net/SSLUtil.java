@@ -10,6 +10,7 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
+
 package org.sonatype.sisu.litmus.testsupport.net;
 
 import javax.net.ssl.SSLContext;
@@ -25,22 +26,19 @@ import com.google.common.base.Throwables;
 public class SSLUtil
 {
 
-    public static void trustEveryone()
-    {
-        try
-        {
-            SSLContext context = SSLContext.getInstance( "SSL" );
-            TrustManager[] tm = new TrustManager[]{ new TrustingX509TrustManager() };
-            context.init( null, tm, null );
-            SSLContext.setDefault( context );
-        }
-        catch ( Exception e )
-        {
-            // don't let checked exceptions through - very unlikely that they happen
-            // with above code anyway, and tests using this probably don't want to catch them.
-            Throwables.propagate( e );
-        }
-
+  public static void trustEveryone() {
+    try {
+      SSLContext context = SSLContext.getInstance("SSL");
+      TrustManager[] tm = new TrustManager[]{new TrustingX509TrustManager()};
+      context.init(null, tm, null);
+      SSLContext.setDefault(context);
     }
+    catch (Exception e) {
+      // don't let checked exceptions through - very unlikely that they happen
+      // with above code anyway, and tests using this probably don't want to catch them.
+      Throwables.propagate(e);
+    }
+
+  }
 
 }
