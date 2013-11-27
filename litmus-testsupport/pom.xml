@@ -19,7 +19,7 @@
   <parent>
     <groupId>org.sonatype.sisu.litmus</groupId>
     <artifactId>litmus</artifactId>
-    <version>1.7.1-SNAPSHOT</version>
+    <version>1.8-SNAPSHOT</version>
   </parent>
 
   <artifactId>litmus-testsupport</artifactId>
@@ -134,15 +134,8 @@
 
     <!-- inject package -->
     <dependency>
-      <groupId>org.sonatype.sisu</groupId>
-      <artifactId>sisu-inject-bean</artifactId>
-      <exclusions>
-        <!-- Exclude no_aop guice; require aop-enabled version -->
-        <exclusion>
-          <groupId>org.sonatype.sisu</groupId>
-          <artifactId>sisu-guice</artifactId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.eclipse.sisu</groupId>
+      <artifactId>org.eclipse.sisu.inject</artifactId>
       <optional>true</optional>
     </dependency>
 
