@@ -20,11 +20,11 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import org.sonatype.gossip.Level;
-import org.sonatype.guice.bean.containers.InjectedTest;
 import org.sonatype.sisu.litmus.testsupport.TestTracer;
 import org.sonatype.sisu.litmus.testsupport.TestUtil;
 
 import com.google.common.base.Preconditions;
+import org.eclipse.sisu.launch.InjectedTest;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Before;
 import org.junit.Rule;
