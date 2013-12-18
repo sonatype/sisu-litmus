@@ -15,8 +15,6 @@ package org.sonatype.sisu.litmus.testsupport.hamcrest;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.sonatype.sisu.litmus.testsupport.TestSupport;
-
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.Rule;
@@ -39,7 +37,6 @@ import static org.junit.Assume.assumeThat;
  * @since 1.8.1
  */
 public class URLMatchersTest
-    extends TestSupport
 {
 
   @Rule
