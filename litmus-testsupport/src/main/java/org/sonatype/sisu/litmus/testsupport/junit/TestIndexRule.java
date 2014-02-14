@@ -205,7 +205,7 @@ public class TestIndexRule
   @Override
   protected void finished(final Description description) {
     initialize();
-    test.setDuration(stopwatch.stop().elapsedTime(TimeUnit.SECONDS));
+    test.setDuration(stopwatch.stop().elapsed(TimeUnit.SECONDS));
     save();
   }
 
